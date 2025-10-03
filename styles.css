@@ -16,7 +16,7 @@
   text-align: left;
   flex: 1;
   overflow-y: auto;
-  background-color: #ffb6c1; 
+  background-color: #00c8ff; 
 }
 
 .tabcontent h1 {
@@ -44,7 +44,7 @@
 
 .tablink {
   background-color: transparent;
-  color: #fbbf24;
+  color: #00c8ff;
   border: none;
   outline: none;
   cursor: pointer;
@@ -63,7 +63,7 @@
 }
 
 .tablink.active {
-  background-color: #ffb6c1; 
+  background-color: #00c8ff; 
 }
 
 .tab-icon {
