@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mobile App - 6 Tabs</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="device">
+        <div id="Text" class="tabcontent">
+            <h1>Text Screen</h1>
+            <p>This is the text tab content.</p>
+        </div>
+
+        <div id="LR" class="tabcontent">
+            <h1>LR Screen</h1>
+            <p>This is the LR (Learning Resources) tab content.</p>
+        </div>
+
+        <div id="Colors" class="tabcontent">
+            <h1>Colors Screen</h1>
+            <p>This is the Colors tab content.</p>
+        </div>
+
+        <div id="Profile" class="tabcontent">
+            <h1>Profile Screen</h1>
+            <p>This is the Profile tab content.</p>
+        </div>
+
+        <div id="Choices" class="tabcontent">
+            <h1>Choices Screen</h1>
+            <p>This is the Choices tab content.</p>
+        </div>
+
+        <div id="ToDo" class="tabcontent">
+            <h1>ToDo Screen</h1>
+            <p>This is the ToDo tab content.</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tablink" onclick="openTab('Text', this, '#ffb6c1')" id="defaultOpen">
+                <div class="tab-icon">📄</div>
+                <div class="tab-label">Text</div>
+            </button>
+            <button class="tablink" onclick="openTab('LR', this, '#ffb6c1')">
+                <div class="tab-icon">⬇️</div>
+                <div class="tab-label">LR</div>
+            </button>
+            <button class="tablink" onclick="openTab('Colors', this, '#ffb6c1')">
+                <div class="tab-icon">🎨</div>
+                <div class="tab-label">Colors</div>
+            </button>
+            <button class="tablink" onclick="openTab('Profile', this, '#ffb6c1')">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">Profile</div>
+            </button>
+            <button class="tablink" onclick="openTab('Choices', this, '#ffb6c1')">
+                <div class="tab-icon">💡</div>
+                <div class="tab-label">Choices</div>
+            </button>
+            <button class="tablink" onclick="openTab('ToDo', this, '#ffb6c1')">
+                <div class="tab-icon">✅</div>
+                <div class="tab-label">ToDo</div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName, element, color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+
+            document.getElementById(tabName).style.display = "block";
+
+            element.style.backgroundColor = color;
+        }
+
+        document.getElementById("defaultOpen").click();
+    </script>
+</body>
+</html>
