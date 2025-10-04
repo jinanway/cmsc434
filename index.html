@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Mobile App - 6 Tabs</title>
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
     <div class="device">
         <div id="Text" class="tabcontent">
@@ -23,8 +25,35 @@
         </div>
 
         <div id="Profile" class="tabcontent">
-            <h1>Profile Screen</h1>
-            <p>This is the Profile tab content.</p>
+            <h1>User Profile</h1>
+            <div class="tab4-content">
+                <img class="tab4-img" src="tab4_pic.png">
+            </div>
+            <div class="tab4-content">
+                <h2><b>Anthony Philips</b></h2>
+            </div>
+
+            <div id="toast" class="toast">
+                <span class="toast-msg"></span>
+                <button class="toast-close" style="color: red;">X</button>
+            </div>
+
+            <script>
+                const toast = document.getElementById('toast');
+                const toastMsg = toast.querySelector('.toast-msg');
+                const toastClose = toast.querySelector('.toast-close');
+                const profImg = document.querySelector('.tab4-img');
+
+                const showToast = (msg) => {
+                    toastMsg.textContent = msg;
+                    toast.classList.add('show');
+                };
+                const hideToast = () => toast.classList.remove('show');
+
+                profImg.addEventListener('click', () => showToast('You cannot change your profile picture in this version'));
+                toastClose.addEventListener('click', hideToast);
+            </script>
+
         </div>
 
         <div id="Choices" class="tabcontent">
@@ -86,4 +115,5 @@
         document.getElementById("defaultOpen").click();
     </script>
 </body>
+
 </html>
