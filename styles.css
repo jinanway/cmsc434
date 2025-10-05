@@ -96,7 +96,44 @@
   }
 }
 
-/* Choices Tab*/
+/* TAB 4 User Profile */
+
+.tab4-content {
+  display: flex;
+  justify-content: center;
+}
+
+.tab4-img {
+  padding-top: 30px;
+  width: 200px;
+  height: 200px;
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  top: 420px;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 10px 14px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+.toast.show {
+  display: flex;
+}
+.toast-close {
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/*TAB 5 Choices Tab*/
 .tab5{
   display: flex;
   justify-content: center;
