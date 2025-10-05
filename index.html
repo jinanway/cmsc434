@@ -33,9 +33,51 @@
         </div>
 
         <div id="ToDo" class="tabcontent">
-            <h1>ToDo Screen</h1>
-            <p>This is the ToDo tab content.</p>
-        </div>
+            <h1>To-Do List</h1>
+            <div class="todo-container">
+                <input type="text" id="todo-input" placeholder="Add a new task...">
+                <button id="add-btn">Add</button>
+                <ul id="todo-list"></ul>
+            </div>
+        
+            <script>
+                const input = document.getElementById("todo-input");
+                const addBtn = document.getElementById("add-btn");
+                const list = document.getElementById("todo-list");
+        
+                // Add new item
+                addBtn.addEventListener("click", () => {
+                    const task = input.value.trim();
+                    if (task === "") return;
+        
+                    const li = document.createElement("li");
+                    li.textContent = task;
+        
+                    // Add "cross off" behavior
+                    li.addEventListener("click", () => {
+                        li.classList.toggle("checked");
+                    });
+        
+                    // Add delete button
+                    const delBtn = document.createElement("span");
+                    delBtn.textContent = "✖";
+                    delBtn.className = "delete";
+                    delBtn.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        li.remove();
+                    });
+        
+                    li.appendChild(delBtn);
+                    list.appendChild(li);
+                    input.value = "";
+                });
+        
+                // Allow pressing Enter to add
+                input.addEventListener("keypress", (e) => {
+                    if (e.key === "Enter") addBtn.click();
+                });
+            </script>
+        </div>        
 
         <div class="tab-navigation">
             <button class="tablink" onclick="openTab('Text', this, '#ffb6c1')" id="defaultOpen">
