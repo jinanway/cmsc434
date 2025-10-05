@@ -95,3 +95,18 @@
     font-size: 9px;
   }
 }
+
+/* Choices Tab*/
+.tab5{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.choices-box{
+  margin-top: 50px;
+  text-align: center;
+  background-color: bisque;
+  width: 400px;
+  height: auto;
+}
