@@ -77,6 +77,69 @@
   text-align: center;
 }
 
+.todo-container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#todo-input {
+  width: 70%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+#add-btn {
+  padding: 8px 12px;
+  margin-left: 5px;
+  background-color: #ffb6c1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#add-btn:hover {
+  background-color: #ff9cb1;
+}
+
+#todo-list {
+  list-style-type: none;
+  margin-top: 15px;
+  padding: 0;
+}
+
+#todo-list li {
+  position: relative;
+  background: #f5f5f5;
+  margin: 6px 0;
+  padding: 10px 35px 10px 10px;
+  text-align: left;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#todo-list li.checked {
+  text-decoration: line-through;
+  color: #888;
+  background-color: #e0e0e0;
+}
+
+.delete {
+  position: absolute;
+  right: 10px;
+  color: #ff4c4c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.delete:hover {
+  color: #ff0000;
+}
+
 @media (max-width: 640px) {
   .device {
     width: 100%;
