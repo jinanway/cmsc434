@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Mobile App - 6 Tabs</title>
+    <title>Kitchen Kompanion</title>
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="bootstrap.min.css">
@@ -11,206 +11,31 @@
 
 <body>
     <div class="device">
-        <div id="Text" class="tabcontent">
-            <h1>Text Screen</h1>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-            <p>Cooking Article</p>
-        </div>
 
-        <div id="LR" class="tabcontent">
-            <h1>-Text in Lower Right-</h1>
-            <div class="lower-right-text">Down Here</div>
-        </div>
-
-        <div id="Colors" class="tabcontent">
-            <h1>-Colors Example-</h1>
-            <div class="color-box black-bg-yellow-text">Hello There</div>
-            <div class="color-box yellow-bg-purple-text">Hi Again</div>
-        </div>
-
-        <div id="Profile" class="tabcontent">
-            <h1>User Profile</h1>
-            <div class="tab4-content">
-                <img class="tab4-img" src="tab4_pic.png">
-            </div>
-            <div class="tab4-content">
-                <h2><b>Anthony Philips</b></h2>
-            </div>
-
-            <div id="toast" class="toast">
-                <span class="toast-msg"></span>
-                <button class="toast-close" style="color: red;">X</button>
-            </div>
-
-            <script>
-                const toast = document.getElementById('toast');
-                const toastMsg = toast.querySelector('.toast-msg');
-                const toastClose = toast.querySelector('.toast-close');
-                const profImg = document.querySelector('.tab4-img');
-
-                const showToast = (msg) => {
-                    toastMsg.textContent = msg;
-                    toast.classList.add('show');
-                };
-                const hideToast = () => toast.classList.remove('show');
-
-                profImg.addEventListener('click', () => showToast('You cannot change your profile picture in this version'));
-                toastClose.addEventListener('click', hideToast);
-            </script>
-        </div>
-
-        <div id="Choices" class="tabcontent">
-            <h1>Choices Screen</h1>
-            <p>Which sauce do you want?</p>
-            <label><input type="radio" name="sauce" value="Marinara">Marinara</label>
-            <label><input type="radio" name="sauce" value="Alfredo">Alfredo</label>
-            <label><input type="radio" name="sauce" value="Butter">Butter</label>
-
-            <p>Select your protein</p>
-            <select id="protein">
-                <option value="">-- Choose a meat --</option>
-                <option value="Chicken">Chicken</option>
-                <option value="Beef">Beef</option>
-                <option value="Pork">Pork</option>
-                <option value="Shrimp">Shrimp</option>
-            </select>
-
-
-            <button onclick="showRecipe()">Show Recipe</button>
-            <div class="tab5">
-                <div class="choices-box" id="output"></div>
-
-            </div>
-
-            <script>
-                function showRecipe() {
-                    //get sauce
-                    const sauces = document.getElementsByName("sauce");
-                    let selectedSauce = "";
-                    for (const s of sauces) {
-                        if (s.checked) {
-                            selectedSauce = s.value;
-                            break;
-                        }
-                    }
-
-                    //get protein
-                    const protein = document.getElementById("protein").value;
-                    const output = document.getElementById("output")
-
-                    //if user didnt select one from each
-                    if (!selectedSauce || !protein) {
-                        output.textContent = "Please choose both a sauce and a protein";
-                    }
-                    else {
-                        output.innerHTML = `Here is a recipe for ${protein} pasta with ${selectedSauce} sauce
-                        <br><a href="#">The Recipe</a>`;
-                    }
-
-                }
-            </script>
+        <div id="Fridge Inventory" class="tabcontent">
 
         </div>
 
-        <div id="ToDo" class="tabcontent">
-            <h1>To-Do List</h1>
-            <div class="todo-container">
-                <input type="text" id="todo-input" placeholder="Add a new task...">
-                <button id="add-btn">Add</button>
-                <ul id="todo-list"></ul>
-            </div>
+        <div id="Shopping List" class="tabcontent">
 
-            <script>
-                const input = document.getElementById("todo-input");
-                const addBtn = document.getElementById("add-btn");
-                const list = document.getElementById("todo-list");
+        </div>
 
-                // Add new item
-                addBtn.addEventListener("click", () => {
-                    const task = input.value.trim();
-                    if (task === "") return;
+        <div id="Recipes" class="tabcontent">
 
-                    const li = document.createElement("li");
-                    li.textContent = task;
-
-                    // Add "cross off" behavior
-                    li.addEventListener("click", () => {
-                        li.classList.toggle("checked");
-                    });
-
-                    // Add delete button
-                    const delBtn = document.createElement("span");
-                    delBtn.textContent = "✖";
-                    delBtn.className = "delete";
-                    delBtn.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        li.remove();
-                    });
-
-                    li.appendChild(delBtn);
-                    list.appendChild(li);
-                    input.value = "";
-                });
-
-                // Allow pressing Enter to add
-                input.addEventListener("keypress", (e) => {
-                    if (e.key === "Enter") addBtn.click();
-                });
-            </script>
         </div>
 
         <div class="tab-navigation">
-            <button class="tablink" onclick="openTab('Text', this, '#ffb6c1')" id="defaultOpen">
-                <div class="tab-icon">📄</div>
-                <div class="tab-label">Text</div>
-            </button>
-            <button class="tablink" onclick="openTab('LR', this, '#ffb6c1')">
-                <div class="tab-icon">⬇️</div>
-                <div class="tab-label">LR</div>
-            </button>
-            <button class="tablink" onclick="openTab('Colors', this, '#ffb6c1')">
-                <div class="tab-icon">🎨</div>
-                <div class="tab-label">Colors</div>
-            </button>
-            <button class="tablink" onclick="openTab('Profile', this, '#ffb6c1')">
+            <button class="tablink" onclick="openTab('Fridge Inventory', this, '#ffb6c1')">
                 <div class="tab-icon">👤</div>
-                <div class="tab-label">Profile</div>
+                <div class="tab-label">Fridge Inventory</div>
             </button>
-            <button class="tablink" onclick="openTab('Choices', this, '#ffb6c1')">
+            <button class="tablink" onclick="openTab('Shopping List', this, '#ffb6c1')">
                 <div class="tab-icon">💡</div>
-                <div class="tab-label">Choices</div>
+                <div class="tab-label">Shopping List</div>
             </button>
-            <button class="tablink" onclick="openTab('ToDo', this, '#ffb6c1')">
+            <button class="tablink" onclick="openTab('Recipes', this, '#ffb6c1')">
                 <div class="tab-icon">✅</div>
-                <div class="tab-label">ToDo</div>
+                <div class="tab-label">Recipes</div>
             </button>
         </div>
     </div>
