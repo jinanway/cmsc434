@@ -438,4 +438,36 @@ body {
     font-size: 10px !important;
     padding: 3px 6px !important;
   }
+
+  /* ✅ ADDED: Fridge Inventory Styling */
+.inventory-list {
+  margin-bottom: 100px;
+}
+
+.inventory-item {
+  background-color: white;
+  border: 2px solid #315659;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inv-name {
+  font-weight: 600;
+  color: #253031;
+}
+
+/* ✅ ADDED: Recipe Cards */
+#recipe-list .card {
+  border: 2px solid #315659;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(37,48,49,0.1);
+}
+#recipe-list h6 {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
 }

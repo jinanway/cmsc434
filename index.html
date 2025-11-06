@@ -13,7 +13,24 @@
     <div class="device">
 
         <div id="Fridge Inventory" class="tabcontent">
+            <h1>Fridge Inventory</h1>
 
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-center" id="fridge-table" style="background:white; border:2px solid #315659;">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item</th>
+                            <th>Status</th>
+                            <th>Check Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fridge-body"></tbody>
+                </table>
+            </div>
+
+            <div id="fridge-empty" class="text-center py-4" style="display:none;">
+                <p class="text-muted">No items in the fridge.</p>
+            </div>
         </div>
 
         <div id="Shopping List" class="tabcontent">
@@ -111,7 +128,32 @@
         </div>
 
         <div id="Recipes" class="tabcontent">
+            <h1>Recipes</h1>
 
+            <div class="card recipe-card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Add Recipe</h5>
+                    <form id="recipe-form" class="row g-2">
+                        <div class="col-12">
+                            <label class="form-label">Recipe Name</label>
+                            <input type="text" class="form-control" id="recipe-name" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Ingredients</label>
+                            <input type="text" class="form-control" id="recipe-ingredients" placeholder="e.g., Chicken, Rice, Spices" required>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100" type="submit">Save Recipe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="recipe-list"></div>
+
+            <div id="recipe-empty" class="text-center py-5" style="display:none;">
+                <p class="text-muted">No saved recipes yet.</p>
+            </div>
         </div>
 
         <div class="tab-navigation">
@@ -135,6 +177,15 @@
         let shoppingItems = [];
         let itemIdCounter = 0;
 
+        let fridgeItems = [
+            { id: 1, name: "Milk", quantity: "1 Gallon", status: "Fresh" },
+            { id: 2, name: "Eggs", quantity: "8 Remaining", status: "Fresh" },
+            { id: 3, name: "Lettuce", quantity: "2.5 Head", status: "Going Bad Soon" },
+            { id: 4, name: "Leftover Pasta", quantity: "1 Container", status: "Eat Today" }
+        ];
+
+        let recipes = [];
+
         function openTab(tabName, element, color) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -151,6 +202,9 @@
             document.getElementById(tabName).style.display = "block";
             element.classList.add("active");
             element.style.backgroundColor = color;
+
+            if (tabName === "Fridge Inventory") renderFridge();
+            if (tabName === "Recipes") renderRecipes();
         }
 
         window.addEventListener('DOMContentLoaded', function() {
@@ -159,6 +213,77 @@
                 openTab('Shopping List', shoppingListTab, '#2978A0');
             }
         });
+
+        function renderFridge() {
+            const body = document.getElementById("fridge-body");
+            const empty = document.getElementById("fridge-empty");
+
+            body.innerHTML = "";
+
+            if (fridgeItems.length === 0) {
+                empty.style.display = "block";
+                return;
+            } else {
+                empty.style.display = "none";
+            }
+
+            fridgeItems.forEach(item => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><strong>${item.name}</strong></td>
+                    <td><span class="badge bg-info text-dark">${item.status}</span></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="alert('${item.name}: ${item.quantity}')">
+                            Check
+                        </button>
+                    </td>
+                `;
+                body.appendChild(row);
+            });
+        }
+
+        document.getElementById("recipe-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = document.getElementById("recipe-name").value.trim();
+            const ing = document.getElementById("recipe-ingredients").value.trim();
+            if (name && ing) {
+                recipes.push({ id: Date.now(), name, ing });
+                this.reset();
+                renderRecipes();
+            }
+        });
+
+        function deleteRecipe(id) {
+            recipes = recipes.filter(r => r.id !== id);
+            renderRecipes();
+        }
+
+        function renderRecipes() {
+            const list = document.getElementById("recipe-list");
+            const empty = document.getElementById("recipe-empty");
+
+            list.innerHTML = "";
+            if (recipes.length === 0) {
+                empty.style.display = "block";
+                return;
+            }
+            empty.style.display = "none";
+
+            recipes.forEach(r => {
+                let card = document.createElement("div");
+                card.className = "recipe-card card mb-2";
+                card.innerHTML = `
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6>${r.name}</h6>
+                            <small class="text-muted">${r.ing}</small>
+                        </div>
+                        <button class="btn btn-outline-danger btn-sm" onclick="deleteRecipe(${r.id})">×</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
 
         function addShoppingItem(name, category, owner) {
             const item = {
