@@ -17,7 +17,97 @@
         </div>
 
         <div id="Shopping List" class="tabcontent">
+            <h1>Shopping List</h1>
+            <div class="shopping-form-container mb-4">
+                <div class="card shopping-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Add New Item</h5>
+                        <form id="shopping-form" class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="item-name" class="form-label">Item Name</label>
+                                <input type="text" class="form-control" id="item-name" placeholder="Enter item name" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label for="item-category" class="form-label">Category</label>
+                                <select class="form-select" id="item-category" required>
+                                    <option value="">Select category</option>
+                                    <option value="Fruits">Fruits</option>
+                                    <option value="Vegetables">Vegetables</option>
+                                    <option value="Dairy">Dairy</option>
+                                    <option value="Meat">Meat</option>
+                                    <option value="Beverages">Beverages</option>
+                                    <option value="Snacks">Snacks</option>
+                                    <option value="Grains">Grains</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label for="item-owner" class="form-label">Assign To</label>
+                                <select class="form-select" id="item-owner" required>
+                                    <option value="">Select roommate</option>
+                                    <option value="Everyone">Everyone</option>
+                                    <option value="Jinan">Jinan</option>
+                                    <option value="Shravan">Shravan</option>
+                                    <option value="Dain">Dain</option>
+                                    <option value="Abhi">Abhi</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100">Add Item</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Filter and Sort Controls -->
+            <div class="filter-sort-container mb-3">
+                <div class="row g-2">
+                    <div class="col-6 col-md-4">
+                        <label for="filter-category" class="form-label small">Filter by Category</label>
+                        <select class="form-select form-select-sm" id="filter-category">
+                            <option value="all">All Categories</option>
+                            <option value="Fruits">Fruits</option>
+                            <option value="Vegetables">Vegetables</option>
+                            <option value="Dairy">Dairy</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Grains">Grains</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label for="filter-owner" class="form-label small">Filter by Owner</label>
+                        <select class="form-select form-select-sm" id="filter-owner">
+                            <option value="all">All Owners</option>
+                            <option value="Everyone">Everyone</option>
+                            <option value="Jinan">Jinan</option>
+                            <option value="Shravan">Shravan</option>
+                            <option value="Dain">Dain</option>
+                            <option value="Abhi">Abhi</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="sort-option" class="form-label small">Sort By</label>
+                        <select class="form-select form-select-sm" id="sort-option">
+                            <option value="name">Name (A-Z)</option>
+                            <option value="category">Category</option>
+                            <option value="owner">Owner</option>
+                            <option value="status">Status</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="shopping-list-container">
+                <ul id="shopping-list" class="list-group">
+                </ul>
+            </div>
+
+            <div id="empty-state" class="text-center py-5" style="display: none;">
+                <p class="text-muted">No items in your shopping list. Add one above!</p>
+            </div>
         </div>
 
         <div id="Recipes" class="tabcontent">
@@ -25,22 +115,26 @@
         </div>
 
         <div class="tab-navigation">
-            <button class="tablink" onclick="openTab('Fridge Inventory', this, '#ffb6c1')">
+            <button class="tablink" onclick="openTab('Fridge Inventory', this, '#2978A0')">
                 <div class="tab-icon">👤</div>
                 <div class="tab-label">Fridge Inventory</div>
             </button>
-            <button class="tablink" onclick="openTab('Shopping List', this, '#ffb6c1')">
+            <button class="tablink" onclick="openTab('Shopping List', this, '#2978A0')">
                 <div class="tab-icon">💡</div>
                 <div class="tab-label">Shopping List</div>
             </button>
-            <button class="tablink" onclick="openTab('Recipes', this, '#ffb6c1')">
+            <button class="tablink" onclick="openTab('Recipes', this, '#2978A0')">
                 <div class="tab-icon">✅</div>
                 <div class="tab-label">Recipes</div>
             </button>
         </div>
     </div>
 
+    <script src="bootstrap.bundle.min.js"></script>
     <script>
+        let shoppingItems = [];
+        let itemIdCounter = 0;
+
         function openTab(tabName, element, color) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -50,15 +144,155 @@
 
             tablinks = document.getElementsByClassName("tablink");
             for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
                 tablinks[i].style.backgroundColor = "";
             }
 
             document.getElementById(tabName).style.display = "block";
-
+            element.classList.add("active");
             element.style.backgroundColor = color;
         }
 
-        document.getElementById("defaultOpen").click();
+        window.addEventListener('DOMContentLoaded', function() {
+            const shoppingListTab = document.querySelectorAll('.tablink')[1];
+            if (shoppingListTab) {
+                openTab('Shopping List', shoppingListTab, '#2978A0');
+            }
+        });
+
+        function addShoppingItem(name, category, owner) {
+            const item = {
+                id: itemIdCounter++,
+                name: name,
+                category: category,
+                owner: owner,
+                purchased: false,
+                dateAdded: new Date()
+            };
+            shoppingItems.push(item);
+            saveToLocalStorage();
+            renderShoppingList();
+        }
+
+        function togglePurchased(itemId) {
+            const item = shoppingItems.find(i => i.id === itemId);
+            if (item) {
+                item.purchased = !item.purchased;
+                saveToLocalStorage();
+                renderShoppingList();
+            }
+        }
+
+        function deleteItem(itemId) {
+            shoppingItems = shoppingItems.filter(i => i.id !== itemId);
+            saveToLocalStorage();
+            renderShoppingList();
+        }
+
+        function renderShoppingList() {
+            const listContainer = document.getElementById('shopping-list');
+            const emptyState = document.getElementById('empty-state');
+            
+            const categoryFilter = document.getElementById('filter-category').value;
+            const ownerFilter = document.getElementById('filter-owner').value;
+            const sortOption = document.getElementById('sort-option').value;
+
+            let filteredItems = shoppingItems.filter(item => {
+                const categoryMatch = categoryFilter === 'all' || item.category === categoryFilter;
+                const ownerMatch = ownerFilter === 'all' || item.owner === ownerFilter;
+                return categoryMatch && ownerMatch;
+            });
+
+            filteredItems.sort((a, b) => {
+                switch(sortOption) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'category':
+                        return a.category.localeCompare(b.category);
+                    case 'owner':
+                        return a.owner.localeCompare(b.owner);
+                    case 'status':
+                        return a.purchased === b.purchased ? 0 : a.purchased ? 1 : -1;
+                    default:
+                        return 0;
+                }
+            });
+
+            listContainer.innerHTML = '';
+
+            if (filteredItems.length === 0) {
+                emptyState.style.display = 'block';
+                listContainer.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                listContainer.style.display = 'block';
+
+                filteredItems.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = `list-group-item shopping-item ${item.purchased ? 'purchased' : ''}`;
+                    li.setAttribute('data-id', item.id);
+                    
+                    li.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" ${item.purchased ? 'checked' : ''} 
+                                       onchange="togglePurchased(${item.id})" id="check-${item.id}">
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1 ${item.purchased ? 'text-decoration-line-through text-muted' : ''}">${item.name}</h6>
+                                        <small class="text-muted">
+                                            <span class="badge bg-secondary me-1">${item.category}</span>
+                                            <span class="badge bg-info">${item.owner}</span>
+                                        </small>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteItem(${item.id})">
+                                        <span>×</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            }
+        }
+
+        document.getElementById('shopping-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('item-name').value.trim();
+            const category = document.getElementById('item-category').value;
+            const owner = document.getElementById('item-owner').value;
+
+            if (name && category && owner) {
+                addShoppingItem(name, category, owner);
+                this.reset();
+            }
+        });
+
+        document.getElementById('filter-category').addEventListener('change', renderShoppingList);
+        document.getElementById('filter-owner').addEventListener('change', renderShoppingList);
+        document.getElementById('sort-option').addEventListener('change', renderShoppingList);
+
+        function saveToLocalStorage() {
+            localStorage.setItem('shoppingItems', JSON.stringify(shoppingItems));
+            localStorage.setItem('itemIdCounter', itemIdCounter.toString());
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('shoppingItems');
+            const savedCounter = localStorage.getItem('itemIdCounter');
+            if (saved) {
+                shoppingItems = JSON.parse(saved);
+                itemIdCounter = savedCounter ? parseInt(savedCounter) : shoppingItems.length;
+            }
+            renderShoppingList();
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+        });
     </script>
 </body>
 
