@@ -536,11 +536,12 @@
         let itemIdCounter = 0;
 
         let fridgeItems = [
-            { id: 1, name: "Milk", quantity: "1 Gallon", status: "Fresh" },
-            { id: 2, name: "Eggs", quantity: "8 Remaining", status: "Fresh" },
-            { id: 3, name: "Lettuce", quantity: "2.5 Head", status: "Going Bad Soon" },
-            { id: 4, name: "Leftover Pasta", quantity: "1 Container", status: "Eat Today" }
+            { id: 1, name: "Milk", quantity: "1 Gallon", category: "Dairy", date: "2025-12-15" },
+            { id: 2, name: "Eggs", quantity: "8 Remaining", category: "Dairy", date: "2025-12-20" },
+            { id: 3, name: "Lettuce", quantity: "2.5 Heads", category: "Produce", date: "2025-11-08" },
+            { id: 4, name: "Leftover Pasta", quantity: "1 Container", category: "Leftovers", date: "2025-11-01" }
         ];
+
 
         let recipes = [];
 
@@ -783,6 +784,48 @@
         window.addEventListener('DOMContentLoaded', function () {
             loadFromLocalStorage();
         });
+
+        window.addEventListener("DOMContentLoaded", function () {
+        fridgeItems.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'inventory-item';
+            itemDiv.style.height = '80px';
+
+            itemDiv.dataset.name = item.name;
+            itemDiv.dataset.date = item.date;
+            itemDiv.dataset.category = item.category;
+            itemDiv.dataset.quantity = item.quantity;
+
+            const formattedDate = formatMMDDYYYY(item.date);
+            const daysText = buildDaysText(item.date);
+            const niceCategory = item.category || 'Uncategorized';
+            const niceQuantity = item.quantity || '1';
+
+            itemDiv.innerHTML = `
+                <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="fw-semibold inv-name">${item.name}</div>
+                        <div class="text-lightgray small inv-meta d-flex align-items-center">
+                            <button class="btn btn-sm btn-primary me-2" onclick="toggleQuantity(this, event)">
+                                Quantity
+                            </button>
+                            <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
+                        </div>
+                    </div>
+                    <div class="text-end me-2">
+                        <div class="fw-semibold inv-days">${daysText}</div>
+                        <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
+                    </div>
+                </div>
+                <button class="inventory-delete-btn">&times;</button>
+            `;
+
+            list.appendChild(itemDiv);
+            addSwipeHandlers(itemDiv);
+        });
+
+        updateEmptyState();
+    });
     </script>
 </body>
 
