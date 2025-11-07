@@ -346,6 +346,23 @@ body {
 .text-lightgray {
   color: lightgray;
 }
+
+.inventory-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 100px;
+}
+
+.inventory-search {
+  display: flex;
+  align-items: center;
+}
+.inventory-search input {
+  min-width: 0;
+}
+
 /*END Fridge Inventory CSS */
 
 /* Shopping List Styles */

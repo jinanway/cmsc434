@@ -27,7 +27,19 @@
                     <div id="empty-state" class="text-center py-5" style="display:none;">
                         <p class="text-muted mb-0">No items in your inventory yet. Add one above!</p>
                     </div>
+                    <div class="inventory-search d-flex gap-2 mb-2">
+                        <input type="text" id="inventorySearchInput" class="form-control form-control-sm"
+                            placeholder="Search by item name">
+                        <button id="inventorySearchBtn" class="btn btn-primary btn-sm">Search</button>
+                        <button id="inventorySearchClear" class="btn btn-outline-secondary btn-sm">Clear</button>
+                    </div>
+
                     <div id="inventoryList" class="d-flex flex-column gap-2">
+                    </div>
+                    <div id="inventoryControls" class="inventory-controls py-2">
+                        <button id="prevInventoryPage" class="btn btn-outline-secondary btn-sm me-2">Previous</button>
+                        <span id="inventoryPageInfo" class="mx-2 small"></span>
+                        <button id="nextInventoryPage" class="btn btn-outline-secondary btn-sm">Next</button>
                     </div>
                 </div>
             </div>
@@ -91,6 +103,106 @@
         <script>
             const form = document.getElementById('addItemForm');
             const list = document.getElementById('inventoryList');
+
+            const ITEMS_PER_PAGE = 7;
+            let currentInventoryPage = 1;
+
+            const inventoryControls = document.getElementById('inventoryControls');
+            const prevInventoryPageBtn = document.getElementById('prevInventoryPage');
+            const nextInventoryPageBtn = document.getElementById('nextInventoryPage');
+            const inventoryPageInfo = document.getElementById('inventoryPageInfo');
+
+            const inventorySearchInput = document.getElementById('inventorySearchInput');
+            const inventorySearchBtn = document.getElementById('inventorySearchBtn');
+            const inventorySearchClear = document.getElementById('inventorySearchClear');
+
+            function applyInventorySearch(term) {
+                const items = getInventoryItems();
+                const lowered = term.trim().toLowerCase();
+
+                items.forEach(item => {
+                    const nameEl = item.querySelector('.inv-name');
+                    const nameText = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
+                    if (!lowered) {
+                        item.classList.remove('search-hidden');
+                    } else {
+                        if (nameText.includes(lowered)) {
+                            item.classList.remove('search-hidden');
+                        } else {
+                            item.classList.add('search-hidden');
+                        }
+                    }
+                });
+                showInventoryPage(1);
+            }
+            if (inventorySearchBtn) {
+                inventorySearchBtn.addEventListener('click', () => {
+                    applyInventorySearch(inventorySearchInput.value);
+                });
+            }
+            if (inventorySearchClear) {
+                inventorySearchClear.addEventListener('click', () => {
+                    inventorySearchInput.value = '';
+                    applyInventorySearch('');
+                });
+            }
+            if (inventorySearchInput) {
+                inventorySearchInput.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') {
+                        applyInventorySearch(inventorySearchInput.value);
+                    }
+                });
+            }
+            function getInventoryItems() {
+                return Array.from(document.querySelectorAll('#inventoryList .inventory-item'));
+            }
+
+            function showInventoryPage(pageNumber) {
+                const allItems = getInventoryItems();
+                const visibleItems = allItems.filter(item => !item.classList.contains('search-hidden'));
+
+                const totalItems = visibleItems.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+
+                currentInventoryPage = Math.min(Math.max(pageNumber, 1), totalPages);
+
+                const startIndex = (currentInventoryPage - 1) * ITEMS_PER_PAGE;
+                const endIndex = startIndex + ITEMS_PER_PAGE;
+
+                allItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+
+                visibleItems.forEach((item, index) => {
+                    if (index >= startIndex && index < endIndex) {
+                        item.style.display = '';
+                    }
+                });
+
+                if (inventoryPageInfo) {
+                    inventoryPageInfo.textContent = `Page ${currentInventoryPage} of ${totalPages}`;
+                }
+                if (prevInventoryPageBtn) {
+                    prevInventoryPageBtn.disabled = currentInventoryPage === 1;
+                }
+                if (nextInventoryPageBtn) {
+                    nextInventoryPageBtn.disabled = currentInventoryPage === totalPages;
+                }
+            }
+
+
+            if (prevInventoryPageBtn) {
+                prevInventoryPageBtn.addEventListener('click', () => {
+                    showInventoryPage(currentInventoryPage - 1);
+                });
+            }
+
+            if (nextInventoryPageBtn) {
+                nextInventoryPageBtn.addEventListener('click', () => {
+                    showInventoryPage(currentInventoryPage + 1);
+                });
+            }
+
 
             let itemToDelete = null;
             let itemToDeleteName = '';
@@ -217,18 +329,29 @@
                 const addModal = bootstrap.Modal.getOrCreateInstance(addModalEl);
                 addModal.hide();
                 updateEmptyState();
-            });
 
+                const total = getInventoryItems().length;
+                const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+                showInventoryPage(totalPages);
+            });
 
             document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
                 if (itemToDelete) {
                     itemToDelete.remove();
                     updateEmptyState();
+
+                    const total = getInventoryItems().length;
+                    const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+                    if (currentInventoryPage > totalPages) {
+                        currentInventoryPage = totalPages;
+                    }
+                    showInventoryPage(currentInventoryPage);
                 }
                 const deleteModalEl = document.getElementById('deleteItemModal');
                 const deleteModal = bootstrap.Modal.getInstance(deleteModalEl);
                 deleteModal.hide();
             });
+
 
             const deleteModalEl = document.getElementById('deleteItemModal');
             deleteModalEl.addEventListener('hide.bs.modal', () => {
@@ -782,28 +905,27 @@
             }
             renderShoppingList();
         }
-
         window.addEventListener('DOMContentLoaded', function () {
             loadFromLocalStorage();
         });
 
         window.addEventListener("DOMContentLoaded", function () {
-        fridgeItems.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'inventory-item';
-            itemDiv.style.height = '80px';
+            fridgeItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+                itemDiv.style.height = '80px';
 
-            itemDiv.dataset.name = item.name;
-            itemDiv.dataset.date = item.date;
-            itemDiv.dataset.category = item.category;
-            itemDiv.dataset.quantity = item.quantity;
+                itemDiv.dataset.name = item.name;
+                itemDiv.dataset.date = item.date;
+                itemDiv.dataset.category = item.category;
+                itemDiv.dataset.quantity = item.quantity;
 
-            const formattedDate = formatMMDDYYYY(item.date);
-            const daysText = buildDaysText(item.date);
-            const niceCategory = item.category || 'Uncategorized';
-            const niceQuantity = item.quantity || '1';
+                const formattedDate = formatMMDDYYYY(item.date);
+                const daysText = buildDaysText(item.date);
+                const niceCategory = item.category || 'Uncategorized';
+                const niceQuantity = item.quantity || '1';
 
-            itemDiv.innerHTML = `
+                itemDiv.innerHTML = `
                 <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
                     <div class="flex-grow-1">
                         <div class="fw-semibold inv-name">${item.name}</div>
@@ -822,12 +944,16 @@
                 <button class="inventory-delete-btn">&times;</button>
             `;
 
-            list.appendChild(itemDiv);
-            addSwipeHandlers(itemDiv);
-        });
+                list.appendChild(itemDiv);
+                addSwipeHandlers(itemDiv);
+            });
 
-        updateEmptyState();
-    });
+            updateEmptyState();
+
+            if (typeof showInventoryPage === 'function') {
+                showInventoryPage(1);
+            }
+        });
     </script>
 </body>
 
