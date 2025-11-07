@@ -95,6 +95,18 @@
             let itemBeingEdited = null;
             let isEditing = false;
 
+            const addItemModalEl = document.getElementById('addItemModal');
+
+            addItemModalEl.addEventListener('hidden.bs.modal', () => {
+                isEditing = false;
+                itemBeingEdited = null;
+
+                document.getElementById('addItemModalTitle').textContent = 'Add New Item';
+                document.getElementById('addItemSubmitBtn').textContent = 'Add Item';
+
+                form.reset();
+            });
+
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
@@ -105,15 +117,12 @@
 
                 if (!name || !date) return;
 
-                // ====== EDIT MODE ======
                 if (isEditing && itemBeingEdited) {
-                    // update data on the existing item
                     itemBeingEdited.dataset.name = name;
                     itemBeingEdited.dataset.date = date;
                     itemBeingEdited.dataset.category = category;
                     itemBeingEdited.dataset.quantity = quantity;
 
-                    // rebuild display text to match your original HTML
                     const formattedDate = formatMMDDYYYY(date);
                     const daysText = buildDaysText(date);
                     const niceCategory = category || 'Uncategorized';
@@ -124,14 +133,12 @@
                     itemBeingEdited.querySelector('.inv-days').textContent = daysText;
                     itemBeingEdited.querySelector('.inv-exp').textContent = `Expires ${formattedDate}`;
 
-                    // reset edit state
                     isEditing = false;
                     itemBeingEdited = null;
                     document.getElementById('addItemModalTitle').textContent = 'Add New Item';
                     document.getElementById('addItemSubmitBtn').textContent = 'Add Item';
 
                 } else {
-                    // ====== ADD MODE (your old code) ======
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'inventory-item';
                     itemDiv.style.height = '80px';
@@ -147,30 +154,49 @@
                     const niceQuantity = quantity || '1';
 
                     itemDiv.innerHTML = `
-          <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
-            <div class="flex-grow-1">
-              <div class="fw-semibold inv-name">${name}</div>
-              <div class="text-lightgray small inv-meta">${niceCategory} · Quantity: ${niceQuantity}</div>
-            </div>
-            <div class="text-end me-2">
-              <div class="fw-semibold inv-days">${daysText}</div>
-              <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
-            </div>
-          </div>
-          <button class="inventory-delete-btn">&times;</button>
-        `;
+                        <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
+                            <div class="flex-grow-1">
+                            <div class="fw-semibold inv-name">${name}</div>
+                            <div class="text-lightgray small inv-meta">${niceCategory} · Quantity: ${niceQuantity}</div>
+                            </div>
+                            <div class="text-end me-2">
+                            <div class="fw-semibold inv-days">${daysText}</div>
+                            <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
+                            </div>
+                        </div>
+                        <button class="inventory-delete-btn">&times;</button>
+                        `;
 
                     list.appendChild(itemDiv);
                     addSwipeHandlers(itemDiv);
 
-                    // click-to-edit for new items
+                    const delBtn = itemDiv.querySelector('.inventory-delete-btn');
+                    delBtn.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        itemToDelete = itemDiv;
+
+                        const name = itemDiv.dataset.name || 'this item';
+                        const date = itemDiv.dataset.date || '';
+                        document.getElementById('deleteMessage').textContent = `Are you sure you want to remove ${name}?`;
+                        document.getElementById('deleteExpiration').textContent = date ? buildExpirationText(date) : '';
+
+                        const deleteModalEl = document.getElementById('deleteItemModal');
+                        const deleteModal = bootstrap.Modal.getOrCreateInstance(deleteModalEl);
+                        deleteModal.show();
+                    });
+
                     itemDiv.addEventListener('click', (ev) => {
                         if (ev.target.closest('.inventory-delete-btn')) return;
+
+                        if (itemDiv._justSwiped) {
+                            itemDiv._justSwiped = false;
+                            return;
+                        }
+
                         openEditModalFor(itemDiv);
                     });
                 }
 
-                // close + reset modal (for BOTH add and edit)
                 form.reset();
                 const addModalEl = document.getElementById('addItemModal');
                 const addModal = bootstrap.Modal.getOrCreateInstance(addModalEl);
@@ -178,7 +204,6 @@
             });
 
 
-            //confirm delete
             document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
                 if (itemToDelete) {
                     itemToDelete.remove();
@@ -263,24 +288,26 @@
                 let swiped = false;
                 let isPointerDown = false;
 
+                item._justSwiped = false;
+
                 item.addEventListener('touchstart', (e) => {
                     startX = e.touches[0].clientX;
                     swiped = false;
+                    item._justSwiped = false;
                 });
 
                 item.addEventListener('touchmove', (e) => {
                     currentX = e.touches[0].clientX;
                     const diff = currentX - startX;
 
-                    //swipe left
                     if (diff < -30 && !swiped) {
                         item.classList.add('show-delete');
                         swiped = true;
+                        item._justSwiped = true;
                     }
-
-                    //swipe right to close
                     if (diff > 30 && item.classList.contains('show-delete')) {
                         item.classList.remove('show-delete');
+                        item._justSwiped = true;
                     }
                 });
 
@@ -288,6 +315,7 @@
                     startX = e.clientX;
                     swiped = false;
                     isPointerDown = true;
+                    item._justSwiped = false;
                 });
 
                 item.addEventListener('mousemove', (e) => {
@@ -298,9 +326,11 @@
                     if (diff < -30 && !swiped) {
                         item.classList.add('show-delete');
                         swiped = true;
+                        item._justSwiped = true;
                     }
                     if (diff > 30 && item.classList.contains('show-delete')) {
                         item.classList.remove('show-delete');
+                        item._justSwiped = true;
                     }
                 });
 
@@ -312,6 +342,7 @@
                     isPointerDown = false;
                 });
             }
+
 
             function openEditModalFor(itemDiv) {
                 isEditing = true;
