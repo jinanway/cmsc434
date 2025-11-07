@@ -131,7 +131,12 @@
                     const niceQuantity = quantity || '1';
 
                     itemBeingEdited.querySelector('.inv-name').textContent = name;
-                    itemBeingEdited.querySelector('.inv-meta').textContent = `${niceCategory} · Quantity: ${niceQuantity}`;
+                    itemBeingEdited.querySelector('.inv-meta').innerHTML = `
+                    <button class="btn btn-sm btn-primary me-2" onclick="toggleQuantity(this, event)">
+                        Quantity
+                    </button>
+                    <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
+                    `;
                     itemBeingEdited.querySelector('.inv-days').textContent = daysText;
                     itemBeingEdited.querySelector('.inv-exp').textContent = `Expires ${formattedDate}`;
 
@@ -156,18 +161,24 @@
                     const niceQuantity = quantity || '1';
 
                     itemDiv.innerHTML = `
-                        <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
-                            <div class="flex-grow-1">
+                    <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
+                        <div class="flex-grow-1">
                             <div class="fw-semibold inv-name">${name}</div>
-                            <div class="text-lightgray small inv-meta">${niceCategory} · Quantity: ${niceQuantity}</div>
+                            <div class="text-lightgray small inv-meta d-flex align-items-center">
+                                <button class="btn btn-sm btn-primary me-2" onclick="toggleQuantity(this, event)">
+                                    Quantity
+                                </button>
+                                <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
                             </div>
-                            <div class="text-end me-2">
+
+                        </div>
+                        <div class="text-end me-2">
                             <div class="fw-semibold inv-days">${daysText}</div>
                             <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
-                            </div>
                         </div>
-                        <button class="inventory-delete-btn">&times;</button>
-                        `;
+                    </div>
+                    <button class="inventory-delete-btn">&times;</button>
+                `;
 
                     list.appendChild(itemDiv);
                     addSwipeHandlers(itemDiv);
@@ -581,7 +592,7 @@
                     <td><span class="badge bg-info text-dark">${item.status}</span></td>
                     <td>
                         <button class="btn btn-primary btn-sm" onclick="alert('${item.name}: ${item.quantity}')">
-                            Check
+                            Quantity
                         </button>
                     </td>
                 `;
@@ -746,6 +757,13 @@
         document.getElementById('filter-category').addEventListener('change', renderShoppingList);
         document.getElementById('filter-owner').addEventListener('change', renderShoppingList);
         document.getElementById('sort-option').addEventListener('change', renderShoppingList);
+
+        function toggleQuantity(btn, event) {
+            event.stopPropagation();
+            const span = btn.parentElement.querySelector('.inv-qty');
+            span.classList.toggle('d-none');
+        }
+
 
         function saveToLocalStorage() {
             localStorage.setItem('shoppingItems', JSON.stringify(shoppingItems));
