@@ -1,18 +1,17 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 400;
   line-height: 1.6;
   color: #333;
-  background-color: white;
 }
 
 .device {
-  margin: auto; 
+  margin: auto;
   width: 640px;
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  background-color: white;
+  background-color: powderblue;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -25,7 +24,7 @@ body {
   text-align: left;
   flex: 1;
   overflow-y: auto;
-  background-color: white; 
+  background-color: white;
 }
 
 .tabcontent h1 {
@@ -45,18 +44,18 @@ body {
 
 .tab-navigation {
   display: flex;
-  background-color: #253031; 
+  background-color: #1e3a8a;
   height: 80px;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  border-top: 2px solid #315659;
+  border-top: 1px solid #333;
 }
 
 .tablink {
   background-color: transparent;
-  color: #C6E0FF;
+  color: #00c8ff;
   border: none;
   outline: none;
   cursor: pointer;
@@ -72,12 +71,11 @@ body {
 }
 
 .tablink:hover {
-  background-color: rgba(198, 224, 255, 0.1);
+  background-color: rgba(251, 191, 36, 0.1);
 }
 
 .tablink.active {
-  background-color: #2978A0; 
-  color: white;
+  background-color: #00c8ff;
 }
 
 .tab-icon {
@@ -198,16 +196,17 @@ body {
   .device {
     width: 100%;
     height: 100vh;
+    max-height: 100vh;
   }
-  
+
   .tab-navigation {
     height: 70px;
   }
-  
+
   .tab-icon {
     font-size: 18px;
   }
-  
+
   .tab-label {
     font-size: 9px;
   }
@@ -251,13 +250,13 @@ body {
 }
 
 /*TAB 5 Choices Tab*/
-.tab5{
+.tab5 {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.choices-box{
+.choices-box {
   margin-top: 50px;
   text-align: center;
   background-color: bisque;
@@ -265,14 +264,98 @@ body {
   height: auto;
 }
 
+/* Fridge Inventory CSS */
+.h-80 {
+  height: 80px;
+}
+
+.add-item {
+  text-align: center !important;
+}
+
+.bg-3 {
+  background-color: #315659;
+}
+
+.fw-700 {
+  font-weight: 900;
+}
+
+.color-1 {
+  color: #253031;
+}
+
+.hr-1 {
+  width: 100%;
+}
+
+.item-text {
+  color: white;
+}
+
+.inventory-item {
+  position: relative;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  height: 78px;
+}
+
+.inventory-item-content {
+  height: 100%;
+  background: #315659;
+  transition: transform 0.2s ease;
+  padding-right: 0.75rem;
+  color: white;
+}
+
+.inventory-delete-btn {
+  position: absolute;
+  top: 0;
+  right: -60px;
+  width: 60px;
+  height: 100%;
+  background: #dc3545;
+  border: none;
+  cursor: pointer;
+  transition: right 0.2s ease;
+  padding: 0;
+}
+
+.inventory-delete-btn::before {
+  content: "X";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+.inventory-item.show-delete .inventory-item-content {
+  transform: translateX(-60px);
+}
+
+.inventory-item.show-delete .inventory-delete-btn {
+  right: 0;
+}
+
+.text-lightgray {
+  color: lightgray;
+}
+/*END Fridge Inventory CSS */
+
 /* Shopping List Styles */
 .shopping-form-container {
   margin-bottom: 20px;
 }
 
 .shopping-card {
-  background-color: #C6E0FF;
-  border: 2px solid #2978A0;
+  background-color: #c6e0ff;
+  border: 2px solid #2978a0;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(37, 48, 49, 0.1);
 }
@@ -288,20 +371,22 @@ body {
   font-size: 14px;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   border: 2px solid #315659;
   border-radius: 8px;
   padding: 8px 12px;
 }
 
-.form-control:focus, .form-select:focus {
-  border-color: #2978A0;
+.form-control:focus,
+.form-select:focus {
+  border-color: #2978a0;
   box-shadow: 0 0 0 0.2rem rgba(41, 120, 160, 0.25);
 }
 
 .btn-primary {
-  background-color: #2978A0;
-  border-color: #2978A0;
+  background-color: #2978a0;
+  border-color: #2978a0;
   color: white;
   font-weight: 600;
   padding: 10px;
@@ -314,7 +399,7 @@ body {
 }
 
 .filter-sort-container {
-  background-color: #2978A0;
+  background-color: #2978a0;
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -374,16 +459,16 @@ body {
 }
 
 .badge.bg-info {
-  background-color: #2978A0 !important;
+  background-color: #2978a0 !important;
 }
 
 .form-check-input:checked {
-  background-color: #2978A0;
-  border-color: #2978A0;
+  background-color: #2978a0;
+  border-color: #2978a0;
 }
 
 .form-check-input:focus {
-  border-color: #2978A0;
+  border-color: #2978a0;
   box-shadow: 0 0 0 0.2rem rgba(41, 120, 160, 0.25);
 }
 
@@ -421,53 +506,52 @@ body {
   .shopping-card {
     margin: 0 -10px;
   }
-  
+
   .filter-sort-container {
     padding: 10px;
   }
-  
+
   .shopping-item {
     padding: 12px;
   }
-  
+
   .shopping-item h6 {
     font-size: 14px;
   }
-  
+
   .badge {
     font-size: 10px !important;
     padding: 3px 6px !important;
   }
 
-  /* ✅ ADDED: Fridge Inventory Styling */
-.inventory-list {
-  margin-bottom: 100px;
-}
+  /* .inventory-list {
+    margin-bottom: 100px;
+  }
 
-.inventory-item {
-  background-color: white;
-  border: 2px solid #315659;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .inventory-item {
+    background-color: white;
+    border: 2px solid #315659;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.inv-name {
-  font-weight: 600;
-  color: #253031;
-}
+  .inv-name {
+    font-weight: 600;
+    color: #253031;
+  } */
 
-/* ✅ ADDED: Recipe Cards */
-#recipe-list .card {
-  border: 2px solid #315659;
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(37,48,49,0.1);
-}
-#recipe-list h6 {
-  font-weight: 600;
-  margin-bottom: 2px;
-}
+  /* Recipe Cards */
+  #recipe-list .card {
+    border: 2px solid #315659;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(37, 48, 49, 0.1);
+  }
+  #recipe-list h6 {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
 }

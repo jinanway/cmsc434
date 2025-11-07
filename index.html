@@ -12,26 +12,371 @@
 <body>
     <div class="device">
 
-        <div id="Fridge Inventory" class="tabcontent">
-            <h1>Fridge Inventory</h1>
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center" id="fridge-table" style="background:white; border:2px solid #315659;">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Item</th>
-                            <th>Status</th>
-                            <th>Check Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody id="fridge-body"></tbody>
-                </table>
-            </div>
-
-            <div id="fridge-empty" class="text-center py-4" style="display:none;">
-                <p class="text-muted">No items in the fridge.</p>
+        <div id="Fridge Inventory" class="tabcontent" style="display:block;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="m-0 fw-bold color-1">Inventory</h1>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                            + Add Item
+                        </button>
+                    </div>
+                    <hr class="hr-1">
+                    <div id="empty-state" class="text-center py-5" style="display:none;">
+                        <p class="text-muted mb-0">No items in your inventory yet. Add one above!</p>
+                    </div>
+                    <div id="inventoryList" class="d-flex flex-column gap-2">
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!--Add/change Item Modal-->
+        <div class="modal fade" id="addItemModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addItemModalTitle">Add New Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addItemForm">
+                            <div class="mb-3">
+                                <label for="itemName" class="form-label">Item Name</label>
+                                <input type="text" id="itemName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="itemCategory" class="form-label">Category</label>
+                                <input type="text" id="itemCategory" class="form-control"
+                                    placeholder="Dairy, Produce, Meat...">
+                            </div>
+                            <div class="mb-3">
+                                <label for="itemQuantity" class="form-label">Quantity</label>
+                                <input type="text" id="itemQuantity" class="form-control"
+                                    placeholder="1 gallon, 10 cups...">
+                            </div>
+                            <div class="mb-3">
+                                <label for="itemDate" class="form-label">Expiration Date</label>
+                                <input type="date" id="itemDate" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" id="addItemSubmitBtn">Add Item</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Remove Item Modal-->
+        <div class="modal fade" id="deleteItemModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Remove Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="deleteMessage">Are you sure you want to remove this item?</p>
+                        <p id="deleteExpiration" class="text-muted small mb-0"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn w-100 text-center btn-danger"
+                            id="confirmDeleteBtn">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const form = document.getElementById('addItemForm');
+            const list = document.getElementById('inventoryList');
+
+            let itemToDelete = null;
+            let itemToDeleteName = '';
+            let itemToDeleteDate = '';
+
+            let itemBeingEdited = null;
+            let isEditing = false;
+
+            const addItemModalEl = document.getElementById('addItemModal');
+
+            addItemModalEl.addEventListener('hidden.bs.modal', () => {
+                isEditing = false;
+                itemBeingEdited = null;
+
+                document.getElementById('addItemModalTitle').textContent = 'Add New Item';
+                document.getElementById('addItemSubmitBtn').textContent = 'Add Item';
+
+                form.reset();
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('itemName').value.trim();
+                const category = document.getElementById('itemCategory').value.trim();
+                const quantity = document.getElementById('itemQuantity').value.trim();
+                const date = document.getElementById('itemDate').value;
+
+                if (!name || !date) return;
+
+                if (isEditing && itemBeingEdited) {
+                    itemBeingEdited.dataset.name = name;
+                    itemBeingEdited.dataset.date = date;
+                    itemBeingEdited.dataset.category = category;
+                    itemBeingEdited.dataset.quantity = quantity;
+
+                    const formattedDate = formatMMDDYYYY(date);
+                    const daysText = buildDaysText(date);
+                    const niceCategory = category || 'Uncategorized';
+                    const niceQuantity = quantity || '1';
+
+                    itemBeingEdited.querySelector('.inv-name').textContent = name;
+                    itemBeingEdited.querySelector('.inv-meta').textContent = `${niceCategory} · Quantity: ${niceQuantity}`;
+                    itemBeingEdited.querySelector('.inv-days').textContent = daysText;
+                    itemBeingEdited.querySelector('.inv-exp').textContent = `Expires ${formattedDate}`;
+
+                    isEditing = false;
+                    itemBeingEdited = null;
+                    document.getElementById('addItemModalTitle').textContent = 'Add New Item';
+                    document.getElementById('addItemSubmitBtn').textContent = 'Add Item';
+
+                } else {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'inventory-item';
+                    itemDiv.style.height = '80px';
+
+                    itemDiv.dataset.name = name;
+                    itemDiv.dataset.date = date;
+                    itemDiv.dataset.category = category;
+                    itemDiv.dataset.quantity = quantity;
+
+                    const formattedDate = formatMMDDYYYY(date);
+                    const daysText = buildDaysText(date);
+                    const niceCategory = category || 'Uncategorized';
+                    const niceQuantity = quantity || '1';
+
+                    itemDiv.innerHTML = `
+                        <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
+                            <div class="flex-grow-1">
+                            <div class="fw-semibold inv-name">${name}</div>
+                            <div class="text-lightgray small inv-meta">${niceCategory} · Quantity: ${niceQuantity}</div>
+                            </div>
+                            <div class="text-end me-2">
+                            <div class="fw-semibold inv-days">${daysText}</div>
+                            <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
+                            </div>
+                        </div>
+                        <button class="inventory-delete-btn">&times;</button>
+                        `;
+
+                    list.appendChild(itemDiv);
+                    addSwipeHandlers(itemDiv);
+
+                    const delBtn = itemDiv.querySelector('.inventory-delete-btn');
+                    delBtn.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        itemToDelete = itemDiv;
+
+                        const name = itemDiv.dataset.name || 'this item';
+                        const date = itemDiv.dataset.date || '';
+                        document.getElementById('deleteMessage').textContent = `Are you sure you want to remove ${name}?`;
+                        document.getElementById('deleteExpiration').textContent = date ? buildExpirationText(date) : '';
+
+                        const deleteModalEl = document.getElementById('deleteItemModal');
+                        const deleteModal = bootstrap.Modal.getOrCreateInstance(deleteModalEl);
+                        deleteModal.show();
+                    });
+
+                    itemDiv.addEventListener('click', (ev) => {
+                        if (ev.target.closest('.inventory-delete-btn')) return;
+
+                        if (itemDiv._justSwiped) {
+                            itemDiv._justSwiped = false;
+                            return;
+                        }
+
+                        openEditModalFor(itemDiv);
+                    });
+                }
+
+                form.reset();
+                const addModalEl = document.getElementById('addItemModal');
+                const addModal = bootstrap.Modal.getOrCreateInstance(addModalEl);
+                addModal.hide();
+                updateEmptyState();
+            });
+
+
+            document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+                if (itemToDelete) {
+                    itemToDelete.remove();
+                    updateEmptyState();
+                }
+                const deleteModalEl = document.getElementById('deleteItemModal');
+                const deleteModal = bootstrap.Modal.getInstance(deleteModalEl);
+                deleteModal.hide();
+            });
+
+            const deleteModalEl = document.getElementById('deleteItemModal');
+            deleteModalEl.addEventListener('hide.bs.modal', () => {
+                if (itemToDelete && itemToDelete.classList.contains('show-delete')) {
+                    itemToDelete.classList.remove('show-delete');
+                }
+            });
+
+            function buildExpirationText(isoDate) {
+                const today = new Date();
+                const itemDate = new Date(isoDate);
+                const mm = String(itemDate.getMonth() + 1).padStart(2, '0');
+                const dd = String(itemDate.getDate()).padStart(2, '0');
+                const yyyy = itemDate.getFullYear();
+                const formatted = `${mm}/${dd}/${yyyy}`;
+
+                today.setHours(0, 0, 0, 0);
+                itemDate.setHours(0, 0, 0, 0);
+
+                if (itemDate < today) {
+                    return `Expired on ${formatted}`;
+                } else {
+                    return `Expiration date: ${formatted}`;
+                }
+            }
+
+            function updateEmptyState() {
+                const list = document.getElementById('inventoryList');
+                const emptyState = document.getElementById('empty-state');
+
+                if (list.children.length === 0) {
+                    emptyState.style.display = 'block';
+                } else {
+                    emptyState.style.display = 'none';
+                }
+            }
+
+            function formatMMDDYYYY(isoDate) {
+                const [year, month, day] = isoDate.split("-");
+                return `${month}/${day}/${year}`;
+            }
+
+            function buildDaysText(isoDate) {
+                const today = new Date();
+                const itemDate = new Date(isoDate);
+
+                today.setHours(0, 0, 0, 0);
+                itemDate.setHours(0, 0, 0, 0);
+
+                const msPerDay = 1000 * 60 * 60 * 24;
+                const diff = itemDate - today;
+                const days = Math.round(diff / msPerDay);
+
+                if (days < 0) {
+                    return 'Expired';
+                } else if (days === 0) {
+                    return 'Use by End of Today';
+                } else if (days === 1) {
+                    return 'Use within 1 day';
+                } else {
+                    return `Use within ${days} days`;
+                }
+            }
+
+
+            function openTab(tabName, element, color) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                tablinks = document.getElementsByClassName("tablink");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].style.backgroundColor = "";
+                }
+
+                document.getElementById(tabName).style.display = "block";
+                element.style.backgroundColor = color;
+            }
+
+            function addSwipeHandlers(item) {
+                let startX = 0;
+                let currentX = 0;
+                let swiped = false;
+                let isPointerDown = false;
+
+                item._justSwiped = false;
+
+                item.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    swiped = false;
+                    item._justSwiped = false;
+                });
+
+                item.addEventListener('touchmove', (e) => {
+                    currentX = e.touches[0].clientX;
+                    const diff = currentX - startX;
+
+                    if (diff < -30 && !swiped) {
+                        item.classList.add('show-delete');
+                        swiped = true;
+                        item._justSwiped = true;
+                    }
+                    if (diff > 30 && item.classList.contains('show-delete')) {
+                        item.classList.remove('show-delete');
+                        item._justSwiped = true;
+                    }
+                });
+
+                item.addEventListener('mousedown', (e) => {
+                    startX = e.clientX;
+                    swiped = false;
+                    isPointerDown = true;
+                    item._justSwiped = false;
+                });
+
+                item.addEventListener('mousemove', (e) => {
+                    if (!isPointerDown) return;
+                    currentX = e.clientX;
+                    const diff = currentX - startX;
+
+                    if (diff < -30 && !swiped) {
+                        item.classList.add('show-delete');
+                        swiped = true;
+                        item._justSwiped = true;
+                    }
+                    if (diff > 30 && item.classList.contains('show-delete')) {
+                        item.classList.remove('show-delete');
+                        item._justSwiped = true;
+                    }
+                });
+
+                item.addEventListener('mouseup', () => {
+                    isPointerDown = false;
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    isPointerDown = false;
+                });
+            }
+
+
+            function openEditModalFor(itemDiv) {
+                isEditing = true;
+                itemBeingEdited = itemDiv;
+
+                document.getElementById('itemName').value = itemDiv.dataset.name || '';
+                document.getElementById('itemDate').value = itemDiv.dataset.date || '';
+                document.getElementById('itemCategory').value = itemDiv.dataset.category || '';
+                document.getElementById('itemQuantity').value = itemDiv.dataset.quantity || '';
+
+                document.getElementById('addItemModalTitle').textContent = 'Edit Item';
+                document.getElementById('addItemSubmitBtn').textContent = 'Update Item';
+
+                const addModal = new bootstrap.Modal(document.getElementById('addItemModal'));
+                addModal.show();
+            }
+            document.getElementById("defaultOpen").click();
+            document.addEventListener('DOMContentLoaded', updateEmptyState);
+        </script>
 
         <div id="Shopping List" class="tabcontent">
             <h1>Shopping List</h1>
@@ -42,7 +387,8 @@
                         <form id="shopping-form" class="row g-3">
                             <div class="col-12 col-md-6">
                                 <label for="item-name" class="form-label">Item Name</label>
-                                <input type="text" class="form-control" id="item-name" placeholder="Enter item name" required>
+                                <input type="text" class="form-control" id="item-name" placeholder="Enter item name"
+                                    required>
                             </div>
                             <div class="col-12 col-md-3">
                                 <label for="item-category" class="form-label">Category</label>
@@ -140,7 +486,8 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Ingredients</label>
-                            <input type="text" class="form-control" id="recipe-ingredients" placeholder="e.g., Chicken, Rice, Spices" required>
+                            <input type="text" class="form-control" id="recipe-ingredients"
+                                placeholder="e.g., Chicken, Rice, Spices" required>
                         </div>
                         <div class="col-12">
                             <button class="btn btn-primary w-100" type="submit">Save Recipe</button>
@@ -207,7 +554,7 @@
             if (tabName === "Recipes") renderRecipes();
         }
 
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', function () {
             const shoppingListTab = document.querySelectorAll('.tablink')[1];
             if (shoppingListTab) {
                 openTab('Shopping List', shoppingListTab, '#2978A0');
@@ -317,7 +664,7 @@
         function renderShoppingList() {
             const listContainer = document.getElementById('shopping-list');
             const emptyState = document.getElementById('empty-state');
-            
+
             const categoryFilter = document.getElementById('filter-category').value;
             const ownerFilter = document.getElementById('filter-owner').value;
             const sortOption = document.getElementById('sort-option').value;
@@ -329,7 +676,7 @@
             });
 
             filteredItems.sort((a, b) => {
-                switch(sortOption) {
+                switch (sortOption) {
                     case 'name':
                         return a.name.localeCompare(b.name);
                     case 'category':
@@ -356,7 +703,7 @@
                     const li = document.createElement('li');
                     li.className = `list-group-item shopping-item ${item.purchased ? 'purchased' : ''}`;
                     li.setAttribute('data-id', item.id);
-                    
+
                     li.innerHTML = `
                         <div class="d-flex align-items-center">
                             <div class="form-check me-3">
@@ -384,7 +731,7 @@
             }
         }
 
-        document.getElementById('shopping-form').addEventListener('submit', function(e) {
+        document.getElementById('shopping-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const name = document.getElementById('item-name').value.trim();
             const category = document.getElementById('item-category').value;
@@ -415,7 +762,7 @@
             renderShoppingList();
         }
 
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', function () {
             loadFromLocalStorage();
         });
     </script>
