@@ -9,7 +9,6 @@
 
   <body>
     <div class="device">
-      <!-- ========== FRIDGE INVENTORY TAB ========== -->
       <div id="Fridge Inventory" class="tabcontent" style="display: block">
         <div class="row">
           <div class="col-12">
@@ -37,7 +36,6 @@
               </p>
             </div>
 
-            <!-- search + pagination -->
             <div class="inventory-search d-flex gap-2 mb-2">
               <input
                 type="text"
@@ -77,7 +75,6 @@
         </div>
       </div>
 
-      <!-- ========== ADD / EDIT ITEM MODAL ========== -->
       <div
         class="modal fade"
         id="addItemModal"
@@ -148,7 +145,6 @@
         </div>
       </div>
 
-      <!-- ========== DELETE MODAL ========== -->
       <div
         class="modal fade"
         id="deleteItemModal"
@@ -185,7 +181,6 @@
         </div>
       </div>
 
-      <!-- ========== SHOPPING LIST TAB ========== -->
       <div id="Shopping List" class="tabcontent">
         <h1>Shopping List</h1>
         <div class="shopping-form-container mb-4">
@@ -238,7 +233,6 @@
           </div>
         </div>
 
-        <!-- Filter and Sort Controls -->
         <div class="filter-sort-container mb-3">
           <div class="row g-2">
             <div class="col-6 col-md-4">
@@ -293,7 +287,6 @@
         </div>
       </div>
 
-      <!-- ========== RECIPES TAB ========== -->
       <div id="Recipes" class="tabcontent">
         <h1>Recipes</h1>
 
@@ -301,7 +294,6 @@
           <div class="card-body">
             <h5 class="card-title">Add Recipe</h5>
 
-            <!-- NEW: Search by Inventory -->
             <div class="card recipe-card mb-3">
               <div class="card-body">
                 <div
@@ -321,10 +313,8 @@
               </div>
             </div>
 
-            <!-- Results list -->
             <div id="recipe-search-results"></div>
 
-            <!-- Manual save -->
             <form id="recipe-form" class="row g-2">
               <div class="col-12">
                 <label class="form-label">Recipe Name</label>
@@ -360,7 +350,6 @@
         </div>
       </div>
 
-      <!-- nav -->
       <div class="tab-navigation">
         <button
           class="tablink"
@@ -385,15 +374,12 @@
 
     <script src="bootstrap.bundle.min.js"></script>
     <script>
-      /* =======================
-       STATE
-    ======================= */
+
       const MEMBERS = ["Everyone", "Jinan", "Shravan", "Dain", "Abhi"];
 
       let shoppingItems = [];
       let itemIdCounter = 0;
 
-      // keep YOUR original inventory seed
       let fridgeItems = [
         {
           id: 1,
@@ -430,9 +416,6 @@
       const resultsContainer = document.getElementById("recipe-search-results");
       const hideBtn = document.getElementById("hide-recipes-btn");
 
-      /* =======================
-       GENERIC TAB HANDLER
-    ======================= */
       function openTab(tabName, element, color) {
         const tabs = document.getElementsByClassName("tabcontent");
         for (let i = 0; i < tabs.length; i++) tabs[i].style.display = "none";
@@ -447,12 +430,9 @@
         element.classList.add("active");
         element.style.backgroundColor = color;
 
-        if (tabName === "Recipes") renderRecipes(); // keep this
+        if (tabName === "Recipes") renderRecipes();
       }
 
-      /* =======================
-       INVENTORY: SEARCH + PAGINATION + CRUD
-    ======================= */
       const form = document.getElementById("addItemForm");
       const list = document.getElementById("inventoryList");
 
@@ -799,7 +779,6 @@
         span.classList.toggle("d-none");
       }
 
-      /* Seed your initial items into DOM once */
       window.addEventListener("DOMContentLoaded", function () {
         fridgeItems.forEach((item) => {
           const itemDiv = document.createElement("div");
@@ -864,9 +843,6 @@
         if (typeof showInventoryPage === "function") showInventoryPage(1);
       });
 
-      /* =======================
-       SHOPPING LIST
-    ======================= */
       function addShoppingItem(name, category, owner) {
         const item = {
           id: itemIdCounter++,
@@ -1012,9 +988,6 @@
       }
       window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
 
-      /* =======================
-       RECIPES: SAVE, LIST, DELETE
-    ======================= */
       document
         .getElementById("recipe-form")
         .addEventListener("submit", function (e) {
@@ -1059,7 +1032,6 @@
         });
       }
 
-      // quick de-dup save from search results
       function saveRecipe(name, ingredientsArr) {
         if (recipes.some((r) => r.name.toLowerCase() === name.toLowerCase()))
           return;
@@ -1067,10 +1039,6 @@
         renderRecipes();
       }
 
-      /* =======================
-       RECIPE SEARCH BY INVENTORY (dynamic matching)
-    ======================= */
-      // normalize helpers
       function norm(s) {
         return (s || "")
           .toLowerCase()
@@ -1187,7 +1155,6 @@
           return;
         }
 
-        // We have suggestions → show the hide button
         if (hideBtn) hideBtn.classList.remove("d-none");
 
         list.forEach(({ name, ingredients, inStock, toBuy }) => {
@@ -1212,7 +1179,6 @@
       </div>
     `;
 
-          // Fill "In inventory"
           const inWrap = card.querySelector(".in-stock");
           if (inStock && inStock.length) {
             inStock.forEach((item) => {
@@ -1225,7 +1191,6 @@
             inWrap.innerHTML = `<span class="text-muted">None</span>`;
           }
 
-          // Fill "Need to buy"
           const buyWrap = card.querySelector(".to-buy");
           if (toBuy && toBuy.length) {
             toBuy.forEach((item) => {
@@ -1238,7 +1203,6 @@
             buyWrap.innerHTML = `<span class="text-muted">Nothing — you can make this now!</span>`;
           }
 
-          // Actions (Save + add missing)
           const actions = document.createElement("div");
           actions.className = "d-flex flex-wrap align-items-center gap-2 mt-2";
 
@@ -1282,10 +1246,8 @@
 
       if (hideBtn) {
         hideBtn.addEventListener("click", () => {
-          resultsContainer.innerHTML = ""; // clear suggestions
-          hideBtn.classList.add("d-none"); // hide the button itself
-          // Optional: smooth scroll back to the search controls
-          // hideBtn.closest(".card-body")?.scrollIntoView({ behavior: "smooth", block: "center" });
+          resultsContainer.innerHTML = ""; 
+          hideBtn.classList.add("d-none"); 
         });
       }
 
@@ -1312,12 +1274,10 @@
           if (!hasShoppingItem(ing))
             addShoppingItem(ing, inferCategory(ing), owner);
         });
-        // switch to Shopping List
         const shoppingTabBtn = document.querySelectorAll(".tablink")[1];
         if (shoppingTabBtn) openTab("Shopping List", shoppingTabBtn, "#2978A0");
       }
 
-      // Wire the search button
       window.addEventListener("DOMContentLoaded", () => {
         const btn = document.getElementById("search-recipes-btn");
         if (btn) btn.addEventListener("click", searchRecipesByInventory);
