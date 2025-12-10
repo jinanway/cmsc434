@@ -571,5 +571,34 @@ body {
     font-weight: 600;
     margin-bottom: 2px;
   }
-  
+}
+
+.trash-icon {
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+}
+
+.trash-btn,
+.plus-btn,
+.minus-btn {
+  background-color: transparent;
+  border: none;
+}
+
+.edit-icon {
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+}
+
+.edit-btn {
+  background-color: transparent;
+  border: none;
+}
+
+.increment-btn {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 5px;
 }

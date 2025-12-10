@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Kitchen Kompanion</title>
-    <link rel="stylesheet" href="styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="bootstrap.min.css" />
-  </head>
 
-  <body>
-    <div class="device">
-      <div id="Fridge Inventory" class="tabcontent" style="display: block">
-        <div class="row">
-          <div class="col-12">
-            <div class="d-flex align-items-center ps-5 ms-5 mb-3">
-              <div class="flex-grow-1 text-center">
-                <h1 class="m-0 fw-bold color-1">Inventory</h1>
-              </div>
-              <button
-                class="btn btn-success"
-                data-bs-toggle="modal"
-                data-bs-target="#addItemModal"
-              >
-                + Add Item
-              </button>
+<head>
+  <title>Kitchen Kompanion</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="bootstrap.min.css" />
+</head>
+
+<body>
+  <div class="device">
+    <div id="Fridge Inventory" class="tabcontent" style="display: block">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex align-items-center ps-5 ms-5 mb-3">
+            <div class="flex-grow-1 text-center">
+              <h1 class="m-0 fw-bold color-1">Inventory</h1>
             </div>
-            <hr class="hr-1" />
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
+              + Add Item
+            </button>
+          </div>
+          <hr class="hr-1" />
 
-            <div
+          <!-- <div
               id="empty-state"
               class="text-center py-5"
               style="display: none"
@@ -34,559 +31,468 @@
               <p class="text-muted mb-0">
                 No items in your inventory yet. Add one above!
               </p>
-            </div>
+            </div> -->
 
-            <div class="inventory-search d-flex gap-2 mb-2">
-              <input
-                type="text"
-                id="inventorySearchInput"
-                class="form-control form-control-sm"
-                placeholder="Search by item name"
-              />
-              <button id="inventorySearchBtn" class="btn btn-primary btn-sm">
-                Search
-              </button>
-              <button
-                id="inventorySearchClear"
-                class="btn btn-outline-secondary btn-sm"
-              >
-                Clear
-              </button>
-            </div>
+          <div class="inventory-search d-flex gap-2 mb-2">
+            <input type="text" id="inventorySearchInput" class="form-control form-control-sm"
+              placeholder="Search by item name" />
+            <button id="inventorySearchBtn" class="btn btn-primary btn-sm">
+              Search
+            </button>
+            <button id="inventorySearchClear" class="btn btn-outline-secondary btn-sm">
+              Clear
+            </button>
+          </div>
 
-            <div id="inventoryList" class="d-flex flex-column gap-2"></div>
+          <div id="inventoryList" class="d-flex flex-column gap-2"></div>
 
-            <div id="inventoryControls" class="inventory-controls py-2">
-              <button
-                id="prevInventoryPage"
-                class="btn btn-outline-secondary btn-sm me-2"
-              >
-                Previous
-              </button>
-              <span id="inventoryPageInfo" class="mx-2 small"></span>
-              <button
-                id="nextInventoryPage"
-                class="btn btn-outline-secondary btn-sm"
-              >
-                Next
-              </button>
-            </div>
+          <div id="inventoryControls" class="inventory-controls py-2">
+            <button id="prevInventoryPage" class="btn btn-outline-secondary btn-sm me-2">
+              Previous
+            </button>
+            <span id="inventoryPageInfo" class="mx-2 small"></span>
+            <button id="nextInventoryPage" class="btn btn-outline-secondary btn-sm">
+              Next
+            </button>
           </div>
         </div>
       </div>
+    </div>
 
-      <div
-        class="modal fade"
-        id="addItemModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="addItemModalTitle">Add New Item</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form id="addItemForm">
-                <div class="mb-3">
-                  <label for="itemName" class="form-label">Item Name</label>
-                  <input
-                    type="text"
-                    id="itemName"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="itemCategory" class="form-label">Category</label>
-                  <input
-                    type="text"
-                    id="itemCategory"
-                    class="form-control"
-                    placeholder="Dairy, Produce, Meat..."
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="itemQuantity" class="form-label">Quantity</label>
-                  <input
-                    type="text"
-                    id="itemQuantity"
-                    class="form-control"
-                    placeholder="1 gallon, 10 cups..."
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="itemDate" class="form-label"
-                    >Expiration Date</label
-                  >
-                  <input
-                    type="date"
-                    id="itemDate"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100"
-                  id="addItemSubmitBtn"
-                >
-                  Add Item
-                </button>
-              </form>
-            </div>
+    <div class="modal fade" id="addItemModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addItemModalTitle">Add New Item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </div>
-      </div>
-
-      <div
-        class="modal fade"
-        id="deleteItemModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Remove Item</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <p id="deleteMessage">
-                Are you sure you want to remove this item?
-              </p>
-              <p id="deleteExpiration" class="text-muted small mb-0"></p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn w-100 text-center btn-danger"
-                id="confirmDeleteBtn"
-              >
-                Remove
+          <div class="modal-body">
+            <form id="addItemForm">
+              <div class="mb-3" id="edit-hide-name">
+                <label for="itemName" class="form-label">Item Name</label>
+                <input type="text" id="itemName" class="form-control" required />
+              </div>
+              <div class="mb-3" id="edit-hide-category">
+                <label for="itemCategory" class="form-label">Category</label>
+                <input type="text" id="itemCategory" class="form-control" placeholder="Dairy, Produce, Meat..." />
+              </div>
+              <div class="mb-3">
+                <label for="itemQuantity" class="form-label">Quantity</label>
+                <input type="text" id="itemQuantity" class="form-control" placeholder="1 gallon, 10 cups..." />
+              </div>
+              <div class="mb-3">
+                <label for="itemDate" class="form-label">Expiration Date</label>
+                <input type="date" id="itemDate" class="form-control" required />
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="addItemSubmitBtn">
+                Add Item
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
 
-      <div id="Shopping List" class="tabcontent">
-        <h1>Shopping List</h1>
-        <div class="shopping-form-container mb-4">
-          <div class="card shopping-card">
-            <div class="card-body">
-              <h5 class="card-title mb-3">Add New Item</h5>
-              <form id="shopping-form" class="row g-3">
-                <div class="col-12 col-md-6">
-                  <label for="item-name" class="form-label">Item Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="item-name"
-                    placeholder="Enter item name"
-                    required
-                  />
-                </div>
-                <div class="col-12 col-md-3">
-                  <label for="item-category" class="form-label">Category</label>
-                  <select class="form-select" id="item-category" required>
-                    <option value="">Select category</option>
-                    <option value="Fruits">Fruits</option>
-                    <option value="Vegetables">Vegetables</option>
-                    <option value="Dairy">Dairy</option>
-                    <option value="Meat">Meat</option>
-                    <option value="Beverages">Beverages</option>
-                    <option value="Snacks">Snacks</option>
-                    <option value="Grains">Grains</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                <div class="col-12 col-md-3">
-                  <label for="item-owner" class="form-label">Assign To</label>
-                  <select class="form-select" id="item-owner" required>
-                    <option value="">Select roommate</option>
-                    <option value="Everyone">Everyone</option>
-                    <option value="Jinan">Jinan</option>
-                    <option value="Shravan">Shravan</option>
-                    <option value="Dain">Dain</option>
-                    <option value="Abhi">Abhi</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary w-100">
-                    Add Item
-                  </button>
-                </div>
-              </form>
-            </div>
+    <div class="modal fade" id="deleteItemModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Remove Item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </div>
-
-        <div class="filter-sort-container mb-3">
-          <div class="row g-2">
-            <div class="col-6 col-md-4">
-              <label for="filter-category" class="form-label small"
-                >Filter by Category</label
-              >
-              <select class="form-select form-select-sm" id="filter-category">
-                <option value="all">All Categories</option>
-                <option value="Fruits">Fruits</option>
-                <option value="Vegetables">Vegetables</option>
-                <option value="Dairy">Dairy</option>
-                <option value="Meat">Meat</option>
-                <option value="Beverages">Beverages</option>
-                <option value="Snacks">Snacks</option>
-                <option value="Grains">Grains</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-4">
-              <label for="filter-owner" class="form-label small"
-                >Filter by Owner</label
-              >
-              <select class="form-select form-select-sm" id="filter-owner">
-                <option value="all">All Owners</option>
-                <option value="Everyone">Everyone</option>
-                <option value="Jinan">Jinan</option>
-                <option value="Shravan">Shravan</option>
-                <option value="Dain">Dain</option>
-                <option value="Abhi">Abhi</option>
-              </select>
-            </div>
-            <div class="col-12 col-md-4">
-              <label for="sort-option" class="form-label small">Sort By</label>
-              <select class="form-select form-select-sm" id="sort-option">
-                <option value="name">Name (A-Z)</option>
-                <option value="category">Category</option>
-                <option value="owner">Owner</option>
-                <option value="status">Status</option>
-              </select>
-            </div>
+          <div class="modal-body">
+            <p id="deleteMessage">
+              Are you sure you want to remove this item?
+            </p>
+            <p id="deleteExpiration" class="text-muted small mb-0"></p>
           </div>
-        </div>
-
-        <div id="shopping-list-container">
-          <ul id="shopping-list" class="list-group"></ul>
-        </div>
-
-        <div id="empty-state" class="text-center py-5" style="display: none">
-          <p class="text-muted">
-            No items in your shopping list. Add one above!
-          </p>
+          <div class="modal-footer">
+            <button type="button" class="btn w-100 text-center btn-danger" id="confirmDeleteBtn">
+              Remove
+            </button>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div id="Recipes" class="tabcontent">
-        <h1>Recipes</h1>
-
-        <div class="card recipe-card mb-3">
+    <div id="Shopping List" class="tabcontent">
+      <h1>Shopping List</h1>
+      <div class="shopping-form-container mb-4">
+        <div class="card shopping-card">
           <div class="card-body">
-            <h5 class="card-title">Add Recipe</h5>
-
-            <div class="card recipe-card mb-3">
-              <div class="card-body">
-                <div
-                  class="d-flex justify-content-between align-items-center flex-wrap gap-2"
-                >
-                  <h5 class="card-title m-0">Search by Inventory</h5>
-                  <button id="search-recipes-btn" class="btn btn-success">
-                    Search Recipes
-                  </button>
-                  <button
-                    id="hide-recipes-btn"
-                    class="btn btn-outline-secondary d-none"
-                  >
-                    Hide Suggestions
-                  </button>
-                </div>
+            <h5 class="card-title mb-3">Add New Item</h5>
+            <form id="shopping-form" class="row g-3">
+              <div class="col-12 col-md-6">
+                <label for="item-name" class="form-label">Item Name</label>
+                <input type="text" class="form-control" id="item-name" placeholder="Enter item name" required />
               </div>
-            </div>
-
-            <div id="recipe-search-results"></div>
-
-            <form id="recipe-form" class="row g-2">
-              <div class="col-12">
-                <label class="form-label">Recipe Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="recipe-name"
-                  required
-                />
+              <div class="col-12 col-md-3">
+                <label for="item-category" class="form-label">Category</label>
+                <select class="form-select" id="item-category" required>
+                  <option value="">Select category</option>
+                  <option value="Fruits">Fruits</option>
+                  <option value="Vegetables">Vegetables</option>
+                  <option value="Dairy">Dairy</option>
+                  <option value="Meat">Meat</option>
+                  <option value="Beverages">Beverages</option>
+                  <option value="Snacks">Snacks</option>
+                  <option value="Grains">Grains</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-3">
+                <label for="item-owner" class="form-label">Assign To</label>
+                <select class="form-select" id="item-owner" required>
+                  <option value="">Select roommate</option>
+                  <option value="Everyone">Everyone</option>
+                  <option value="Jinan">Jinan</option>
+                  <option value="Shravan">Shravan</option>
+                  <option value="Dain">Dain</option>
+                  <option value="Abhi">Abhi</option>
+                </select>
               </div>
               <div class="col-12">
-                <label class="form-label">Ingredients</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="recipe-ingredients"
-                  placeholder="e.g., Chicken, Rice, Spices"
-                  required
-                />
-              </div>
-              <div class="col-12">
-                <button class="btn btn-primary w-100" type="submit">
-                  Save Recipe
+                <button type="submit" class="btn btn-primary w-100">
+                  Add Item
                 </button>
               </div>
             </form>
           </div>
         </div>
+      </div>
 
-        <div id="recipe-list"></div>
-        <div id="recipe-empty" class="text-center py-5" style="display: none">
-          <p class="text-muted">No saved recipes yet.</p>
+      <div class="filter-sort-container mb-3">
+        <div class="row g-2">
+          <div class="col-6 col-md-4">
+            <label for="filter-category" class="form-label small">Filter by Category</label>
+            <select class="form-select form-select-sm" id="filter-category">
+              <option value="all">All Categories</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Meat">Meat</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Grains">Grains</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-4">
+            <label for="filter-owner" class="form-label small">Filter by Owner</label>
+            <select class="form-select form-select-sm" id="filter-owner">
+              <option value="all">All Owners</option>
+              <option value="Everyone">Everyone</option>
+              <option value="Jinan">Jinan</option>
+              <option value="Shravan">Shravan</option>
+              <option value="Dain">Dain</option>
+              <option value="Abhi">Abhi</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label for="sort-option" class="form-label small">Sort By</label>
+            <select class="form-select form-select-sm" id="sort-option">
+              <option value="name">Name (A-Z)</option>
+              <option value="category">Category</option>
+              <option value="owner">Owner</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <div class="tab-navigation">
-        <button
-          class="tablink"
-          onclick="openTab('Fridge Inventory', this, '#2978A0')"
-        >
-          <div class="tab-icon">👤</div>
-          <div class="tab-label">Fridge Inventory</div>
-        </button>
-        <button
-          class="tablink"
-          onclick="openTab('Shopping List', this, '#2978A0')"
-        >
-          <div class="tab-icon">💡</div>
-          <div class="tab-label">Shopping List</div>
-        </button>
-        <button class="tablink" onclick="openTab('Recipes', this, '#2978A0')">
-          <div class="tab-icon">✅</div>
-          <div class="tab-label">Recipes</div>
-        </button>
+      <div id="shopping-list-container">
+        <ul id="shopping-list" class="list-group"></ul>
+      </div>
+
+      <div id="empty-state" class="text-center py-5" style="display: none">
+        <p class="text-muted">
+          No items in your shopping list. Add one above!
+        </p>
       </div>
     </div>
 
-    <script src="bootstrap.bundle.min.js"></script>
-    <script>
+    <div id="Recipes" class="tabcontent">
+      <h1>Recipes</h1>
 
-      const MEMBERS = ["Everyone", "Jinan", "Shravan", "Dain", "Abhi"];
+      <div class="card recipe-card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Add Recipe</h5>
 
-      let shoppingItems = [];
-      let itemIdCounter = 0;
+          <div class="card recipe-card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h5 class="card-title m-0">Search by Inventory</h5>
+                <button id="search-recipes-btn" class="btn btn-success">
+                  Search Recipes
+                </button>
+                <button id="hide-recipes-btn" class="btn btn-outline-secondary d-none">
+                  Hide Suggestions
+                </button>
+              </div>
+            </div>
+          </div>
 
-      let fridgeItems = [
-        {
-          id: 1,
-          name: "Milk",
-          quantity: "1 Gallon",
-          category: "Dairy",
-          date: "2025-12-15",
-        },
-        {
-          id: 2,
-          name: "Eggs",
-          quantity: "8 Remaining",
-          category: "Dairy",
-          date: "2025-12-20",
-        },
-        {
-          id: 3,
-          name: "Lettuce",
-          quantity: "2.5 Heads",
-          category: "Produce",
-          date: "2025-11-08",
-        },
-        {
-          id: 4,
-          name: "Leftover Pasta",
-          quantity: "1 Container",
-          category: "Leftovers",
-          date: "2025-11-01",
-        },
-      ];
+          <div id="recipe-search-results"></div>
 
-      let recipes = [];
+          <form id="recipe-form" class="row g-2">
+            <div class="col-12">
+              <label class="form-label">Recipe Name</label>
+              <input type="text" class="form-control" id="recipe-name" required />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Ingredients</label>
+              <input type="text" class="form-control" id="recipe-ingredients" placeholder="e.g., Chicken, Rice, Spices"
+                required />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary w-100" type="submit">
+                Save Recipe
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
 
-      const resultsContainer = document.getElementById("recipe-search-results");
-      const hideBtn = document.getElementById("hide-recipes-btn");
+      <div id="recipe-list"></div>
+      <div id="recipe-empty" class="text-center py-5" style="display: none">
+        <p class="text-muted">No saved recipes yet.</p>
+      </div>
+    </div>
 
-      function openTab(tabName, element, color) {
-        const tabs = document.getElementsByClassName("tabcontent");
-        for (let i = 0; i < tabs.length; i++) tabs[i].style.display = "none";
+    <div class="tab-navigation">
+      <button class="tablink" onclick="openTab('Fridge Inventory', this, '#2978A0')">
+        <div class="tab-icon">👤</div>
+        <div class="tab-label">Fridge Inventory</div>
+      </button>
+      <button class="tablink" onclick="openTab('Shopping List', this, '#2978A0')">
+        <div class="tab-icon">💡</div>
+        <div class="tab-label">Shopping List</div>
+      </button>
+      <button class="tablink" onclick="openTab('Recipes', this, '#2978A0')">
+        <div class="tab-icon">✅</div>
+        <div class="tab-label">Recipes</div>
+      </button>
+    </div>
+  </div>
 
-        const links = document.getElementsByClassName("tablink");
-        for (let i = 0; i < links.length; i++) {
-          links[i].classList.remove("active");
-          links[i].style.backgroundColor = "";
-        }
+  <script src="bootstrap.bundle.min.js"></script>
+  <script>
 
-        document.getElementById(tabName).style.display = "block";
-        element.classList.add("active");
-        element.style.backgroundColor = color;
+    const MEMBERS = ["Everyone", "Jinan", "Shravan", "Dain", "Abhi"];
 
-        if (tabName === "Recipes") renderRecipes();
+    let shoppingItems = [];
+    let itemIdCounter = 0;
+
+    let fridgeItems = [
+      {
+        id: 1,
+        name: "Milk",
+        quantity: "1 Gallon",
+        category: "Dairy",
+        date: "2025-12-15",
+      },
+      {
+        id: 2,
+        name: "Eggs",
+        quantity: "8 Remaining",
+        category: "Dairy",
+        date: "2025-12-20",
+      },
+      {
+        id: 3,
+        name: "Lettuce",
+        quantity: "2.5 Heads",
+        category: "Produce",
+        date: "2025-11-08",
+      },
+      {
+        id: 4,
+        name: "Leftover Pasta",
+        quantity: "1 Container",
+        category: "Leftovers",
+        date: "2025-11-01",
+      },
+    ];
+
+    let recipes = [];
+
+    const resultsContainer = document.getElementById("recipe-search-results");
+    const hideBtn = document.getElementById("hide-recipes-btn");
+
+    function openTab(tabName, element, color) {
+      const tabs = document.getElementsByClassName("tabcontent");
+      for (let i = 0; i < tabs.length; i++) tabs[i].style.display = "none";
+
+      const links = document.getElementsByClassName("tablink");
+      for (let i = 0; i < links.length; i++) {
+        links[i].classList.remove("active");
+        links[i].style.backgroundColor = "";
       }
 
-      const form = document.getElementById("addItemForm");
-      const list = document.getElementById("inventoryList");
+      document.getElementById(tabName).style.display = "block";
+      element.classList.add("active");
+      element.style.backgroundColor = color;
 
-      const ITEMS_PER_PAGE = 7;
-      let currentInventoryPage = 1;
+      if (tabName === "Recipes") renderRecipes();
+    }
 
-      const inventoryControls = document.getElementById("inventoryControls");
-      const prevInventoryPageBtn = document.getElementById("prevInventoryPage");
-      const nextInventoryPageBtn = document.getElementById("nextInventoryPage");
-      const inventoryPageInfo = document.getElementById("inventoryPageInfo");
+    const form = document.getElementById("addItemForm");
+    const list = document.getElementById("inventoryList");
 
-      const inventorySearchInput = document.getElementById(
-        "inventorySearchInput"
+    const ITEMS_PER_PAGE = 7;
+    let currentInventoryPage = 1;
+
+    const inventoryControls = document.getElementById("inventoryControls");
+    const prevInventoryPageBtn = document.getElementById("prevInventoryPage");
+    const nextInventoryPageBtn = document.getElementById("nextInventoryPage");
+    const inventoryPageInfo = document.getElementById("inventoryPageInfo");
+
+    const inventorySearchInput = document.getElementById(
+      "inventorySearchInput"
+    );
+    const inventorySearchBtn = document.getElementById("inventorySearchBtn");
+    const inventorySearchClear = document.getElementById(
+      "inventorySearchClear"
+    );
+
+    function getInventoryItems() {
+      return Array.from(
+        document.querySelectorAll("#inventoryList .inventory-item")
       );
-      const inventorySearchBtn = document.getElementById("inventorySearchBtn");
-      const inventorySearchClear = document.getElementById(
-        "inventorySearchClear"
+    }
+
+    function applyInventorySearch(term) {
+      const items = getInventoryItems();
+      const lowered = term.trim().toLowerCase();
+      items.forEach((item) => {
+        const nameEl = item.querySelector(".inv-name");
+        const nameText = nameEl
+          ? nameEl.textContent.trim().toLowerCase()
+          : "";
+        if (!lowered || nameText.includes(lowered))
+          item.classList.remove("search-hidden");
+        else item.classList.add("search-hidden");
+      });
+      showInventoryPage(1);
+    }
+
+    if (inventorySearchBtn)
+      inventorySearchBtn.addEventListener("click", () =>
+        applyInventorySearch(inventorySearchInput.value)
+      );
+    if (inventorySearchClear)
+      inventorySearchClear.addEventListener("click", () => {
+        inventorySearchInput.value = "";
+        applyInventorySearch("");
+      });
+    if (inventorySearchInput)
+      inventorySearchInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter")
+          applyInventorySearch(inventorySearchInput.value);
+      });
+
+    function showInventoryPage(pageNumber) {
+      const allItems = getInventoryItems();
+      const visibleItems = allItems.filter(
+        (item) => !item.classList.contains("search-hidden")
       );
 
-      function getInventoryItems() {
-        return Array.from(
-          document.querySelectorAll("#inventoryList .inventory-item")
-        );
-      }
+      const totalItems = visibleItems.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+      currentInventoryPage = Math.min(Math.max(pageNumber, 1), totalPages);
 
-      function applyInventorySearch(term) {
-        const items = getInventoryItems();
-        const lowered = term.trim().toLowerCase();
-        items.forEach((item) => {
-          const nameEl = item.querySelector(".inv-name");
-          const nameText = nameEl
-            ? nameEl.textContent.trim().toLowerCase()
-            : "";
-          if (!lowered || nameText.includes(lowered))
-            item.classList.remove("search-hidden");
-          else item.classList.add("search-hidden");
-        });
-        showInventoryPage(1);
-      }
+      const startIndex = (currentInventoryPage - 1) * ITEMS_PER_PAGE;
+      const endIndex = startIndex + ITEMS_PER_PAGE;
 
-      if (inventorySearchBtn)
-        inventorySearchBtn.addEventListener("click", () =>
-          applyInventorySearch(inventorySearchInput.value)
-        );
-      if (inventorySearchClear)
-        inventorySearchClear.addEventListener("click", () => {
-          inventorySearchInput.value = "";
-          applyInventorySearch("");
-        });
-      if (inventorySearchInput)
-        inventorySearchInput.addEventListener("keyup", (e) => {
-          if (e.key === "Enter")
-            applyInventorySearch(inventorySearchInput.value);
-        });
+      allItems.forEach((item) => (item.style.display = "none"));
+      visibleItems.forEach((item, index) => {
+        if (index >= startIndex && index < endIndex) item.style.display = "";
+      });
 
-      function showInventoryPage(pageNumber) {
-        const allItems = getInventoryItems();
-        const visibleItems = allItems.filter(
-          (item) => !item.classList.contains("search-hidden")
-        );
-
-        const totalItems = visibleItems.length;
-        const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
-        currentInventoryPage = Math.min(Math.max(pageNumber, 1), totalPages);
-
-        const startIndex = (currentInventoryPage - 1) * ITEMS_PER_PAGE;
-        const endIndex = startIndex + ITEMS_PER_PAGE;
-
-        allItems.forEach((item) => (item.style.display = "none"));
-        visibleItems.forEach((item, index) => {
-          if (index >= startIndex && index < endIndex) item.style.display = "";
-        });
-
-        if (inventoryPageInfo)
-          inventoryPageInfo.textContent = `Page ${currentInventoryPage} of ${totalPages}`;
-        if (prevInventoryPageBtn)
-          prevInventoryPageBtn.disabled = currentInventoryPage === 1;
-        if (nextInventoryPageBtn)
-          nextInventoryPageBtn.disabled = currentInventoryPage === totalPages;
-      }
-
+      if (inventoryPageInfo)
+        inventoryPageInfo.textContent = `Page ${currentInventoryPage} of ${totalPages}`;
       if (prevInventoryPageBtn)
-        prevInventoryPageBtn.addEventListener("click", () =>
-          showInventoryPage(currentInventoryPage - 1)
-        );
+        prevInventoryPageBtn.disabled = currentInventoryPage === 1;
       if (nextInventoryPageBtn)
-        nextInventoryPageBtn.addEventListener("click", () =>
-          showInventoryPage(currentInventoryPage + 1)
-        );
+        nextInventoryPageBtn.disabled = currentInventoryPage === totalPages;
+    }
 
-      let itemToDelete = null;
-      let itemBeingEdited = null;
-      let isEditing = false;
+    if (prevInventoryPageBtn)
+      prevInventoryPageBtn.addEventListener("click", () =>
+        showInventoryPage(currentInventoryPage - 1)
+      );
+    if (nextInventoryPageBtn)
+      nextInventoryPageBtn.addEventListener("click", () =>
+        showInventoryPage(currentInventoryPage + 1)
+      );
 
-      const addItemModalEl = document.getElementById("addItemModal");
-      addItemModalEl.addEventListener("hidden.bs.modal", () => {
+    let itemToDelete = null;
+    let itemBeingEdited = null;
+    let isEditing = false;
+
+    const addItemModalEl = document.getElementById("addItemModal");
+    addItemModalEl.addEventListener("hidden.bs.modal", () => {
+      isEditing = false;
+      itemBeingEdited = null;
+      document.getElementById("edit-hide-name").style.display = "";
+      document.getElementById("edit-hide-category").style.display = "";
+      document.getElementById("addItemModalTitle").textContent =
+        "Add New Item";
+      document.getElementById("addItemSubmitBtn").textContent = "Add Item";
+      form.reset();
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("itemName").value.trim();
+      const category = document.getElementById("itemCategory").value.trim();
+      const quantity = document.getElementById("itemQuantity").value.trim();
+      const date = document.getElementById("itemDate").value;
+      if (!name || !date) return;
+
+
+      if (isEditing && itemBeingEdited) {
+        itemBeingEdited.dataset.name = name;
+        itemBeingEdited.dataset.date = date;
+        itemBeingEdited.dataset.category = category;
+        itemBeingEdited.dataset.quantity = quantity;
+
+        const formattedDate = formatMMDDYYYY(date);
+        const daysText = buildDaysText(date);
+        const niceCategory = category || "Uncategorized";
+        const niceQuantity = quantity || "1";
+
+        itemBeingEdited.querySelector(".inv-name").textContent = name;
+        itemBeingEdited.querySelector(".inv-meta").innerHTML = `
+          <button class="btn btn-sm btn-primary me-2" onclick="toggleQuantity(this, event)">Quantity</button>
+          <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
+        `;
+        itemBeingEdited.querySelector(".inv-days").textContent = daysText;
+        itemBeingEdited.querySelector(
+          ".inv-exp"
+        ).textContent = `Expires ${formattedDate}`;
+
         isEditing = false;
         itemBeingEdited = null;
         document.getElementById("addItemModalTitle").textContent =
           "Add New Item";
         document.getElementById("addItemSubmitBtn").textContent = "Add Item";
-        form.reset();
-      });
+      } else {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "inventory-item";
+        itemDiv.style.height = "80px";
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("itemName").value.trim();
-        const category = document.getElementById("itemCategory").value.trim();
-        const quantity = document.getElementById("itemQuantity").value.trim();
-        const date = document.getElementById("itemDate").value;
-        if (!name || !date) return;
+        itemDiv.dataset.name = name;
+        itemDiv.dataset.date = date;
+        itemDiv.dataset.category = category;
+        itemDiv.dataset.quantity = quantity;
 
-        if (isEditing && itemBeingEdited) {
-          itemBeingEdited.dataset.name = name;
-          itemBeingEdited.dataset.date = date;
-          itemBeingEdited.dataset.category = category;
-          itemBeingEdited.dataset.quantity = quantity;
+        const formattedDate = formatMMDDYYYY(date);
+        const daysText = buildDaysText(date);
+        const niceCategory = category || "Uncategorized";
+        const niceQuantity = quantity || "1";
 
-          const formattedDate = formatMMDDYYYY(date);
-          const daysText = buildDaysText(date);
-          const niceCategory = category || "Uncategorized";
-          const niceQuantity = quantity || "1";
-
-          itemBeingEdited.querySelector(".inv-name").textContent = name;
-          itemBeingEdited.querySelector(".inv-meta").innerHTML = `
-          <button class="btn btn-sm btn-primary me-2" onclick="toggleQuantity(this, event)">Quantity</button>
-          <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
-        `;
-          itemBeingEdited.querySelector(".inv-days").textContent = daysText;
-          itemBeingEdited.querySelector(
-            ".inv-exp"
-          ).textContent = `Expires ${formattedDate}`;
-
-          isEditing = false;
-          itemBeingEdited = null;
-          document.getElementById("addItemModalTitle").textContent =
-            "Add New Item";
-          document.getElementById("addItemSubmitBtn").textContent = "Add Item";
-        } else {
-          const itemDiv = document.createElement("div");
-          itemDiv.className = "inventory-item";
-          itemDiv.style.height = "80px";
-
-          itemDiv.dataset.name = name;
-          itemDiv.dataset.date = date;
-          itemDiv.dataset.category = category;
-          itemDiv.dataset.quantity = quantity;
-
-          const formattedDate = formatMMDDYYYY(date);
-          const daysText = buildDaysText(date);
-          const niceCategory = category || "Uncategorized";
-          const niceQuantity = quantity || "1";
-
-          itemDiv.innerHTML = `
+        itemDiv.innerHTML = `
           <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
             <div class="flex-grow-1">
               <div class="fw-semibold inv-name">${name}</div>
@@ -595,432 +501,430 @@
                 <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
               </div>
             </div>
-            <div class="text-end me-2">
+            <div class="text-end me-2 d-flex flex-column align-items-end">
               <div class="fw-semibold inv-days">${daysText}</div>
               <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
+              <button class="inventory-delete-btn btn btn-link p-0 mt-1" title="Delete" style="font-size: 1.5rem; background: transparent;">
+                <img src="./trash.png" alt="Delete" style="width: 28px; height: 28px; object-fit: contain; display: block;">
+              </button>
             </div>
           </div>
-          <button class="inventory-delete-btn">&times;</button>
         `;
 
-          list.appendChild(itemDiv);
-          addSwipeHandlers(itemDiv);
+        list.appendChild(itemDiv);
+        addSwipeHandlers(itemDiv);
 
-          const delBtn = itemDiv.querySelector(".inventory-delete-btn");
-          delBtn.addEventListener("click", (ev) => {
-            ev.stopPropagation();
-            itemToDelete = itemDiv;
+        const delBtn = itemDiv.querySelector(".inventory-delete-btn");
+        delBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          itemToDelete = itemDiv;
 
-            const name = itemDiv.dataset.name || "this item";
-            const date = itemDiv.dataset.date || "";
-            document.getElementById(
-              "deleteMessage"
-            ).textContent = `Are you sure you want to remove ${name}?`;
-            document.getElementById("deleteExpiration").textContent = date
-              ? buildExpirationText(date)
-              : "";
+          const name = itemDiv.dataset.name || "this item";
+          const date = itemDiv.dataset.date || "";
+          document.getElementById(
+            "deleteMessage"
+          ).textContent = `Are you sure you want to remove ${name}?`;
+          document.getElementById("deleteExpiration").textContent = date
+            ? buildExpirationText(date)
+            : "";
 
-            const deleteModalEl = document.getElementById("deleteItemModal");
-            const deleteModal =
-              bootstrap.Modal.getOrCreateInstance(deleteModalEl);
-            deleteModal.show();
-          });
+          const deleteModalEl = document.getElementById("deleteItemModal");
+          const deleteModal =
+            bootstrap.Modal.getOrCreateInstance(deleteModalEl);
+          deleteModal.show();
+        });
 
-          itemDiv.addEventListener("click", (ev) => {
-            if (ev.target.closest(".inventory-delete-btn")) return;
-            if (itemDiv._justSwiped) {
-              itemDiv._justSwiped = false;
-              return;
-            }
-            openEditModalFor(itemDiv);
-          });
+        itemDiv.addEventListener("click", (ev) => {
+          if (ev.target.closest(".inventory-delete-btn")) return;
+          if (itemDiv._justSwiped) {
+            itemDiv._justSwiped = false;
+            return;
+          }
+          openEditModalFor(itemDiv);
+        });
+      }
+
+      form.reset();
+      bootstrap.Modal.getOrCreateInstance(addItemModalEl).hide();
+      updateEmptyState();
+
+      // keep pagination sensible
+      const total = getInventoryItems().length;
+      const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+      showInventoryPage(totalPages);
+    });
+
+    document
+      .getElementById("confirmDeleteBtn")
+      .addEventListener("click", () => {
+        if (itemToDelete) {
+          itemToDelete.remove();
+          updateEmptyState();
+          const total = getInventoryItems().length;
+          const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+          if (currentInventoryPage > totalPages)
+            currentInventoryPage = totalPages;
+          showInventoryPage(currentInventoryPage);
         }
-
-        form.reset();
-        bootstrap.Modal.getOrCreateInstance(addItemModalEl).hide();
-        updateEmptyState();
-
-        // keep pagination sensible
-        const total = getInventoryItems().length;
-        const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-        showInventoryPage(totalPages);
+        bootstrap.Modal.getInstance(
+          document.getElementById("deleteItemModal")
+        ).hide();
       });
 
-      document
-        .getElementById("confirmDeleteBtn")
-        .addEventListener("click", () => {
-          if (itemToDelete) {
-            itemToDelete.remove();
-            updateEmptyState();
-            const total = getInventoryItems().length;
-            const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
-            if (currentInventoryPage > totalPages)
-              currentInventoryPage = totalPages;
-            showInventoryPage(currentInventoryPage);
-          }
-          bootstrap.Modal.getInstance(
-            document.getElementById("deleteItemModal")
-          ).hide();
-        });
+    document
+      .getElementById("deleteItemModal")
+      .addEventListener("hide.bs.modal", () => {
+        if (itemToDelete && itemToDelete.classList.contains("show-delete")) {
+          itemToDelete.classList.remove("show-delete");
+        }
+      });
 
-      document
-        .getElementById("deleteItemModal")
-        .addEventListener("hide.bs.modal", () => {
-          if (itemToDelete && itemToDelete.classList.contains("show-delete")) {
-            itemToDelete.classList.remove("show-delete");
-          }
-        });
+    function buildExpirationText(isoDate) {
+      const today = new Date();
+      const itemDate = new Date(isoDate);
+      const mm = String(itemDate.getMonth() + 1).padStart(2, "0");
+      const dd = String(itemDate.getDate()).padStart(2, "0");
+      const yyyy = itemDate.getFullYear();
+      const formatted = `${mm}/${dd}/${yyyy}`;
+      today.setHours(0, 0, 0, 0);
+      itemDate.setHours(0, 0, 0, 0);
+      return itemDate < today
+        ? `Expired on ${formatted}`
+        : `Expiration date: ${formatted}`;
+    }
 
-      function buildExpirationText(isoDate) {
-        const today = new Date();
-        const itemDate = new Date(isoDate);
-        const mm = String(itemDate.getMonth() + 1).padStart(2, "0");
-        const dd = String(itemDate.getDate()).padStart(2, "0");
-        const yyyy = itemDate.getFullYear();
-        const formatted = `${mm}/${dd}/${yyyy}`;
-        today.setHours(0, 0, 0, 0);
-        itemDate.setHours(0, 0, 0, 0);
-        return itemDate < today
-          ? `Expired on ${formatted}`
-          : `Expiration date: ${formatted}`;
-      }
+    function updateEmptyState() {
+      const emptyState = document.getElementById("empty-state");
+      emptyState.style.display =
+        list.children.length === 0 ? "block" : "none";
+    }
 
-      function updateEmptyState() {
-        const emptyState = document.getElementById("empty-state");
-        emptyState.style.display =
-          list.children.length === 0 ? "block" : "none";
-      }
+    function formatMMDDYYYY(isoDate) {
+      const [year, month, day] = isoDate.split("-");
+      return `${month}/${day}/${year}`;
+    }
 
-      function formatMMDDYYYY(isoDate) {
-        const [year, month, day] = isoDate.split("-");
-        return `${month}/${day}/${year}`;
-      }
+    function buildDaysText(isoDate) {
+      const today = new Date();
+      const itemDate = new Date(isoDate);
+      today.setHours(0, 0, 0, 0);
+      itemDate.setHours(0, 0, 0, 0);
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const days = Math.round((itemDate - today) / msPerDay);
+      if (days < 0) return "Expired";
+      if (days === 0) return "Use by End of Today";
+      if (days === 1) return "Use within 1 day";
+      return `Use within ${days} days`;
+    }
 
-      function buildDaysText(isoDate) {
-        const today = new Date();
-        const itemDate = new Date(isoDate);
-        today.setHours(0, 0, 0, 0);
-        itemDate.setHours(0, 0, 0, 0);
-        const msPerDay = 1000 * 60 * 60 * 24;
-        const days = Math.round((itemDate - today) / msPerDay);
-        if (days < 0) return "Expired";
-        if (days === 0) return "Use by End of Today";
-        if (days === 1) return "Use within 1 day";
-        return `Use within ${days} days`;
-      }
+    function addSwipeHandlers(item) {
+      let startX = 0,
+        currentX = 0,
+        swiped = false,
+        isPointerDown = false;
+      // Swipe-to-delete removed. No-op function for compatibility.
+      item._justSwiped = false;
+      item.addEventListener("touchstart", (e) => { });
+      item.addEventListener("touchmove", (e) => { });
+      item.addEventListener("mousedown", (e) => { });
+      item.addEventListener("mousemove", (e) => { });
+      item.addEventListener("mouseup", () => { });
+      item.addEventListener("mouseleave", () => { });
+    }
 
-      function addSwipeHandlers(item) {
-        let startX = 0,
-          currentX = 0,
-          swiped = false,
-          isPointerDown = false;
-        item._justSwiped = false;
+    function openEditModalFor(itemDiv) {
+      isEditing = true;
+      itemBeingEdited = itemDiv;
+      document.getElementById("edit-hide-name").style.display = "none";
+      document.getElementById("edit-hide-category").style.display = "none";
+      // document.getElementById("itemName").value = itemDiv.dataset.name || "";
+      document.getElementById("itemDate").value = itemDiv.dataset.date || "";
+      // document.getElementById("itemCategory").value =
+      //   itemDiv.dataset.category || "";
+      document.getElementById("itemQuantity").value =
+        itemDiv.dataset.quantity || "";
+      document.getElementById("addItemModalTitle").textContent = `Edit - ${itemDiv.dataset.name}`;
+      document.getElementById("addItemSubmitBtn").textContent = "Update Item";
+      new bootstrap.Modal(addItemModalEl).show();
+    }
 
-        item.addEventListener("touchstart", (e) => {
-          startX = e.touches[0].clientX;
-          swiped = false;
-          item._justSwiped = false;
-        });
-        item.addEventListener("touchmove", (e) => {
-          currentX = e.touches[0].clientX;
-          const diff = currentX - startX;
-          if (diff < -30 && !swiped) {
-            item.classList.add("show-delete");
-            swiped = true;
-            item._justSwiped = true;
-          }
-          if (diff > 30 && item.classList.contains("show-delete")) {
-            item.classList.remove("show-delete");
-            item._justSwiped = true;
-          }
-        });
+    function toggleQuantity(btn, event) {
+      event.stopPropagation();
+      const span = btn.parentElement.querySelector(".inv-qty");
+      span.classList.toggle("d-none");
+    }
 
-        item.addEventListener("mousedown", (e) => {
-          startX = e.clientX;
-          swiped = false;
-          isPointerDown = true;
-          item._justSwiped = false;
-        });
-        item.addEventListener("mousemove", (e) => {
-          if (!isPointerDown) return;
-          currentX = e.clientX;
-          const diff = currentX - startX;
-          if (diff < -30 && !swiped) {
-            item.classList.add("show-delete");
-            swiped = true;
-            item._justSwiped = true;
-          }
-          if (diff > 30 && item.classList.contains("show-delete")) {
-            item.classList.remove("show-delete");
-            item._justSwiped = true;
-          }
-        });
-        item.addEventListener("mouseup", () => (isPointerDown = false));
-        item.addEventListener("mouseleave", () => (isPointerDown = false));
-      }
+    window.addEventListener("DOMContentLoaded", function () {
 
-      function openEditModalFor(itemDiv) {
-        isEditing = true;
-        itemBeingEdited = itemDiv;
-        document.getElementById("itemName").value = itemDiv.dataset.name || "";
-        document.getElementById("itemDate").value = itemDiv.dataset.date || "";
-        document.getElementById("itemCategory").value =
-          itemDiv.dataset.category || "";
-        document.getElementById("itemQuantity").value =
-          itemDiv.dataset.quantity || "";
-        document.getElementById("addItemModalTitle").textContent = "Edit Item";
-        document.getElementById("addItemSubmitBtn").textContent = "Update Item";
-        new bootstrap.Modal(addItemModalEl).show();
-      }
+      fridgeItems.forEach((item) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "inventory-item";
+        itemDiv.style.height = "80px";
+        itemDiv.dataset.name = item.name;
+        itemDiv.dataset.date = item.date;
+        itemDiv.dataset.category = item.category;
+        itemDiv.dataset.quantity = item.quantity;
 
-      function toggleQuantity(btn, event) {
-        event.stopPropagation();
-        const span = btn.parentElement.querySelector(".inv-qty");
-        span.classList.toggle("d-none");
-      }
+        const formattedDate = formatMMDDYYYY(item.date);
+        const daysText = buildDaysText(item.date);
+        const niceCategory = item.category || "Uncategorized";
+        const niceQuantity = item.quantity || "1";
 
-      window.addEventListener("DOMContentLoaded", function () {
-        fridgeItems.forEach((item) => {
-          const itemDiv = document.createElement("div");
-          itemDiv.className = "inventory-item";
-          itemDiv.style.height = "80px";
-          itemDiv.dataset.name = item.name;
-          itemDiv.dataset.date = item.date;
-          itemDiv.dataset.category = item.category;
-          itemDiv.dataset.quantity = item.quantity;
-
-          const formattedDate = formatMMDDYYYY(item.date);
-          const daysText = buildDaysText(item.date);
-          const niceCategory = item.category || "Uncategorized";
-          const niceQuantity = item.quantity || "1";
-
-          itemDiv.innerHTML = `
+        itemDiv.innerHTML = `
           <div class="inventory-item-content d-flex w-100 h-100 px-3 align-items-center">
             <div class="flex-grow-1">
-              <div class="fw-semibold inv-name">${item.name}</div>
+              <div class="fw-semibold inv-name">${item.name}
+                <button class="plus-btn">
+                  <img src="plus.png" class="increment-btn">
+                </button>
+                <button class="minus-btn">
+                  <img src="minus.png" class="increment-btn">
+                </button>
+                </div>
               <div class="text-lightgray small inv-meta d-flex align-items-center">
-                <button class="btn btn-sm btn-primary me-2" onclick="toggleQuantity(this, event)">Quantity</button>
-                <span class="inv-qty d-none">${niceCategory} · Quantity: ${niceQuantity}</span>
+                <span class="quantity-text" data-quantity="${item.quantity}">
+                  ${niceCategory} · Quantity: <span class="qty-num">${item.quantity}</span>
+                </span>
               </div>
             </div>
-            <div class="text-end me-2">
+            <div class="text-end me-2 d-flex flex-column align-items-end">
               <div class="fw-semibold inv-days">${daysText}</div>
               <div class="text-lightgray small inv-exp">Expires ${formattedDate}</div>
+
+            </div>
+            <div>
+              <button class="edit-btn">
+                <img src="edit.png" class="edit-icon">
+              </button>
+            </div>
+            <div>
+              <button class="trash-btn">
+                <img src="trash.png" class="trash-icon">
+              </button>
             </div>
           </div>
-          <button class="inventory-delete-btn">&times;</button>
         `;
 
-          list.appendChild(itemDiv);
-          addSwipeHandlers(itemDiv);
+        list.appendChild(itemDiv);
+        addSwipeHandlers(itemDiv);
 
-          itemDiv
-            .querySelector(".inventory-delete-btn")
-            .addEventListener("click", (ev) => {
-              ev.stopPropagation();
-              itemToDelete = itemDiv;
-              document.getElementById(
-                "deleteMessage"
-              ).textContent = `Are you sure you want to remove ${item.name}?`;
-              document.getElementById("deleteExpiration").textContent =
-                buildExpirationText(item.date);
-              bootstrap.Modal.getOrCreateInstance(
-                document.getElementById("deleteItemModal")
-              ).show();
-            });
+        const plusBtn = itemDiv.querySelector('.plus-btn');
+        const minusBtn = itemDiv.querySelector('.minus-btn');
+        const qtyNum = itemDiv.querySelector('.qty-num');
+        console.log(qtyNum.textContent)
+        if (plusBtn && qtyNum) {
+          plusBtn.addEventListener('click', () => {
+            let current = qtyNum.textContent.split(" ");
+            current[0]++;
+            qtyNum.textContent = current.join(" ");
+          });
+        }
 
-          itemDiv.addEventListener("click", (ev) => {
-            if (ev.target.closest(".inventory-delete-btn")) return;
-            if (itemDiv._justSwiped) {
-              itemDiv._justSwiped = false;
-              return;
-            }
+        if (minusBtn && qtyNum) {
+          minusBtn.addEventListener('click', () => {
+            let current = qtyNum.textContent.split(" ");
+            current[0] = Math.max(0, current[0] - 1);
+            qtyNum.textContent = current.join(" ");
+          });
+        }
+        const trashBtn = itemDiv.querySelector('.trash-btn');
+        if (trashBtn) {
+          trashBtn.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            itemToDelete = itemDiv;
+            document.getElementById("deleteMessage").textContent = `Are you sure you want to remove ${item.name}?`;
+            document.getElementById("deleteExpiration").textContent = buildExpirationText(item.date);
+            bootstrap.Modal.getOrCreateInstance(document.getElementById("deleteItemModal")).show();
+          });
+        }
+
+        const editBtn = itemDiv.querySelector(".edit-btn");
+
+        if (editBtn) {
+          editBtn.addEventListener("click", (ev) => {
+            ev.stopPropagation(); // prevent row clicks
             openEditModalFor(itemDiv);
           });
-        });
-
-        updateEmptyState();
-        if (typeof showInventoryPage === "function") showInventoryPage(1);
+        }
       });
 
-      function addShoppingItem(name, category, owner) {
-        const item = {
-          id: itemIdCounter++,
-          name,
-          category,
-          owner,
-          purchased: false,
-          dateAdded: new Date(),
-        };
-        shoppingItems.push(item);
+      updateEmptyState();
+      if (typeof showInventoryPage === "function") showInventoryPage(1);
+    });
+
+    function addShoppingItem(name, category, owner) {
+      const item = {
+        id: itemIdCounter++,
+        name,
+        category,
+        owner,
+        purchased: false,
+        dateAdded: new Date(),
+      };
+      shoppingItems.push(item);
+      saveToLocalStorage();
+      renderShoppingList();
+    }
+
+    function togglePurchased(itemId) {
+      const item = shoppingItems.find((i) => i.id === itemId);
+      if (item) {
+        item.purchased = !item.purchased;
         saveToLocalStorage();
         renderShoppingList();
       }
+    }
 
-      function togglePurchased(itemId) {
-        const item = shoppingItems.find((i) => i.id === itemId);
-        if (item) {
-          item.purchased = !item.purchased;
-          saveToLocalStorage();
-          renderShoppingList();
+    function deleteItem(itemId) {
+      shoppingItems = shoppingItems.filter((i) => i.id !== itemId);
+      saveToLocalStorage();
+      renderShoppingList();
+    }
+
+    function renderShoppingList() {
+      const listContainer = document.getElementById("shopping-list");
+      const emptyState = document.getElementById("empty-state");
+
+      const categoryFilter = document.getElementById("filter-category").value;
+      const ownerFilter = document.getElementById("filter-owner").value;
+      const sortOption = document.getElementById("sort-option").value;
+
+      let filteredItems = shoppingItems.filter((item) => {
+        const categoryMatch =
+          categoryFilter === "all" || item.category === categoryFilter;
+        const ownerMatch =
+          ownerFilter === "all" || item.owner === ownerFilter;
+        return categoryMatch && ownerMatch;
+      });
+
+      filteredItems.sort((a, b) => {
+        switch (sortOption) {
+          case "name":
+            return a.name.localeCompare(b.name);
+          case "category":
+            return a.category.localeCompare(b.category);
+          case "owner":
+            return a.owner.localeCompare(b.owner);
+          case "status":
+            return a.purchased === b.purchased ? 0 : a.purchased ? 1 : -1;
+          default:
+            return 0;
         }
-      }
+      });
 
-      function deleteItem(itemId) {
-        shoppingItems = shoppingItems.filter((i) => i.id !== itemId);
-        saveToLocalStorage();
-        renderShoppingList();
-      }
-
-      function renderShoppingList() {
-        const listContainer = document.getElementById("shopping-list");
-        const emptyState = document.getElementById("empty-state");
-
-        const categoryFilter = document.getElementById("filter-category").value;
-        const ownerFilter = document.getElementById("filter-owner").value;
-        const sortOption = document.getElementById("sort-option").value;
-
-        let filteredItems = shoppingItems.filter((item) => {
-          const categoryMatch =
-            categoryFilter === "all" || item.category === categoryFilter;
-          const ownerMatch =
-            ownerFilter === "all" || item.owner === ownerFilter;
-          return categoryMatch && ownerMatch;
-        });
-
-        filteredItems.sort((a, b) => {
-          switch (sortOption) {
-            case "name":
-              return a.name.localeCompare(b.name);
-            case "category":
-              return a.category.localeCompare(b.category);
-            case "owner":
-              return a.owner.localeCompare(b.owner);
-            case "status":
-              return a.purchased === b.purchased ? 0 : a.purchased ? 1 : -1;
-            default:
-              return 0;
-          }
-        });
-
-        listContainer.innerHTML = "";
-        if (filteredItems.length === 0) {
-          emptyState.style.display = "block";
-          listContainer.style.display = "none";
-        } else {
-          emptyState.style.display = "none";
-          listContainer.style.display = "block";
-          filteredItems.forEach((item) => {
-            const li = document.createElement("li");
-            li.className = `list-group-item shopping-item ${
-              item.purchased ? "purchased" : ""
+      listContainer.innerHTML = "";
+      if (filteredItems.length === 0) {
+        emptyState.style.display = "block";
+        listContainer.style.display = "none";
+      } else {
+        emptyState.style.display = "none";
+        listContainer.style.display = "block";
+        filteredItems.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = `list-group-item shopping-item ${item.purchased ? "purchased" : ""
             }`;
-            li.setAttribute("data-id", item.id);
-            li.innerHTML = `
+          li.setAttribute("data-id", item.id);
+          li.innerHTML = `
             <div class="d-flex align-items-center">
               <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" ${
-                  item.purchased ? "checked" : ""
-                } onchange="togglePurchased(${item.id})" id="check-${item.id}">
+                <input class="form-check-input" type="checkbox" ${item.purchased ? "checked" : ""
+            } onchange="togglePurchased(${item.id})" id="check-${item.id}">
               </div>
               <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6 class="mb-1 ${
-                      item.purchased
-                        ? "text-decoration-line-through text-muted"
-                        : ""
-                    }">${item.name}</h6>
+                    <h6 class="mb-1 ${item.purchased
+              ? "text-decoration-line-through text-muted"
+              : ""
+            }">${item.name}</h6>
                     <small class="text-muted">
-                      <span class="badge bg-secondary me-1">${
-                        item.category
-                      }</span>
+                      <span class="badge bg-secondary me-1">${item.category
+            }</span>
                       <span class="badge bg-info">${item.owner}</span>
                     </small>
                   </div>
-                  <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteItem(${
-                    item.id
-                  })"><span>×</span></button>
+                  <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteItem(${item.id
+            })"><span>×</span></button>
                 </div>
               </div>
             </div>`;
-            listContainer.appendChild(li);
-          });
-        }
-      }
-
-      document
-        .getElementById("shopping-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const name = document.getElementById("item-name").value.trim();
-          const category = document.getElementById("item-category").value;
-          const owner = document.getElementById("item-owner").value;
-          if (name && category && owner) {
-            addShoppingItem(name, category, owner);
-            this.reset();
-          }
+          listContainer.appendChild(li);
         });
-      document
-        .getElementById("filter-category")
-        .addEventListener("change", renderShoppingList);
-      document
-        .getElementById("filter-owner")
-        .addEventListener("change", renderShoppingList);
-      document
-        .getElementById("sort-option")
-        .addEventListener("change", renderShoppingList);
-
-      function saveToLocalStorage() {
-        localStorage.setItem("shoppingItems", JSON.stringify(shoppingItems));
-        localStorage.setItem("itemIdCounter", itemIdCounter.toString());
       }
-      function loadFromLocalStorage() {
-        const saved = localStorage.getItem("shoppingItems");
-        const savedCounter = localStorage.getItem("itemIdCounter");
-        if (saved) {
-          shoppingItems = JSON.parse(saved);
-          itemIdCounter = savedCounter
-            ? parseInt(savedCounter)
-            : shoppingItems.length;
+    }
+
+    document
+      .getElementById("shopping-form")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("item-name").value.trim();
+        const category = document.getElementById("item-category").value;
+        const owner = document.getElementById("item-owner").value;
+        if (name && category && owner) {
+          addShoppingItem(name, category, owner);
+          this.reset();
         }
-        renderShoppingList();
+      });
+    document
+      .getElementById("filter-category")
+      .addEventListener("change", renderShoppingList);
+    document
+      .getElementById("filter-owner")
+      .addEventListener("change", renderShoppingList);
+    document
+      .getElementById("sort-option")
+      .addEventListener("change", renderShoppingList);
+
+    function saveToLocalStorage() {
+      localStorage.setItem("shoppingItems", JSON.stringify(shoppingItems));
+      localStorage.setItem("itemIdCounter", itemIdCounter.toString());
+    }
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem("shoppingItems");
+      const savedCounter = localStorage.getItem("itemIdCounter");
+      if (saved) {
+        shoppingItems = JSON.parse(saved);
+        itemIdCounter = savedCounter
+          ? parseInt(savedCounter)
+          : shoppingItems.length;
       }
-      window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
+      renderShoppingList();
+    }
+    window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
 
-      document
-        .getElementById("recipe-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const name = document.getElementById("recipe-name").value.trim();
-          const ing = document
-            .getElementById("recipe-ingredients")
-            .value.trim();
-          if (name && ing) {
-            recipes.push({ id: Date.now(), name, ing });
-            this.reset();
-            renderRecipes();
-          }
-        });
-
-      function deleteRecipe(id) {
-        recipes = recipes.filter((r) => r.id !== id);
-        renderRecipes();
-      }
-
-      function renderRecipes() {
-        const list = document.getElementById("recipe-list");
-        const empty = document.getElementById("recipe-empty");
-        list.innerHTML = "";
-        if (recipes.length === 0) {
-          empty.style.display = "block";
-          return;
+    document
+      .getElementById("recipe-form")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("recipe-name").value.trim();
+        const ing = document
+          .getElementById("recipe-ingredients")
+          .value.trim();
+        if (name && ing) {
+          recipes.push({ id: Date.now(), name, ing });
+          this.reset();
+          renderRecipes();
         }
-        empty.style.display = "none";
-        recipes.forEach((r) => {
-          const card = document.createElement("div");
-          card.className = "recipe-card card mb-2";
-          card.innerHTML = `
+      });
+
+    function deleteRecipe(id) {
+      recipes = recipes.filter((r) => r.id !== id);
+      renderRecipes();
+    }
+
+    function renderRecipes() {
+      const list = document.getElementById("recipe-list");
+      const empty = document.getElementById("recipe-empty");
+      list.innerHTML = "";
+      if (recipes.length === 0) {
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+      recipes.forEach((r) => {
+        const card = document.createElement("div");
+        card.className = "recipe-card card mb-2";
+        card.innerHTML = `
           <div class="card-body d-flex justify-content-between align-items-center">
             <div>
               <h6>${r.name}</h6>
@@ -1028,139 +932,139 @@
             </div>
             <button class="btn btn-outline-danger btn-sm" onclick="deleteRecipe(${r.id})">×</button>
           </div>`;
-          list.appendChild(card);
-        });
+        list.appendChild(card);
+      });
+    }
+
+    function saveRecipe(name, ingredientsArr) {
+      if (recipes.some((r) => r.name.toLowerCase() === name.toLowerCase()))
+        return;
+      recipes.push({ id: Date.now(), name, ing: ingredientsArr.join(", ") });
+      renderRecipes();
+    }
+
+    function norm(s) {
+      return (s || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .trim()
+        .replace(/\s+/g, " ");
+    }
+    function stemWord(w) {
+      if (w.endsWith("es")) return w.slice(0, -2);
+      if (w.endsWith("s")) return w.slice(0, -1);
+      return w;
+    }
+    function tokenizeName(name) {
+      return norm(name).split(" ").map(stemWord).filter(Boolean);
+    }
+
+    function getInventoryTokenSet() {
+      const set = new Set();
+      const nodes = document.querySelectorAll(
+        "#inventoryList .inventory-item"
+      );
+      nodes.forEach((node) => {
+        const raw =
+          node.dataset.name ||
+          node.querySelector(".inv-name")?.textContent ||
+          "";
+        tokenizeName(raw).forEach((tok) => set.add(tok));
+      });
+      return set;
+    }
+
+    function compareRecipeToInventory(recipe, invTokenSet) {
+      const inStock = [];
+      const toBuy = [];
+      recipe.ingredients.forEach((ing) => {
+        const tokens = tokenizeName(ing);
+        const present = tokens.some((t) => invTokenSet.has(t));
+        (present ? inStock : toBuy).push(ing);
+      });
+      return { inStock, toBuy };
+    }
+
+    const recipeSuggestions = [
+      {
+        id: "r1",
+        name: "Chicken Fried Rice",
+        ingredients: [
+          "Chicken",
+          "Rice",
+          "Eggs",
+          "Peas",
+          "Carrots",
+          "Soy Sauce",
+          "Garlic",
+          "Oil",
+        ],
+      },
+      {
+        id: "r2",
+        name: "Classic Omelette",
+        ingredients: ["Eggs", "Milk", "Butter", "Salt", "Pepper", "Cheese"],
+      },
+      {
+        id: "r3",
+        name: "Grilled Cheese Sandwich",
+        ingredients: ["Bread", "Butter", "Cheese"],
+      },
+      {
+        id: "r4",
+        name: "Caesar Salad",
+        ingredients: [
+          "Lettuce",
+          "Parmesan",
+          "Croutons",
+          "Chicken",
+          "Caesar Dressing",
+        ],
+      },
+      {
+        id: "r5",
+        name: "Pasta Marinara",
+        ingredients: [
+          "Pasta",
+          "Tomato Sauce",
+          "Garlic",
+          "Olive Oil",
+          "Basil",
+          "Salt",
+        ],
+      },
+    ];
+
+    function scoreSuggestion(match) {
+      return match.inStock.length * 10 - match.toBuy.length;
+    }
+
+    function searchRecipesByInventory() {
+      const invSet = getInventoryTokenSet();
+      const matches = recipeSuggestions
+        .map((r) => {
+          const { inStock, toBuy } = compareRecipeToInventory(r, invSet);
+          return { ...r, inStock, toBuy };
+        })
+        .sort((a, b) => scoreSuggestion(b) - scoreSuggestion(a));
+      renderRecipeSearchResults(matches);
+    }
+
+    function renderRecipeSearchResults(list) {
+      resultsContainer.innerHTML = "";
+
+      if (!list.length) {
+        resultsContainer.innerHTML = `<div class="text-center py-4 text-muted">No recipes found.</div>`;
+        if (hideBtn) hideBtn.classList.add("d-none"); // nothing to hide
+        return;
       }
 
-      function saveRecipe(name, ingredientsArr) {
-        if (recipes.some((r) => r.name.toLowerCase() === name.toLowerCase()))
-          return;
-        recipes.push({ id: Date.now(), name, ing: ingredientsArr.join(", ") });
-        renderRecipes();
-      }
+      if (hideBtn) hideBtn.classList.remove("d-none");
 
-      function norm(s) {
-        return (s || "")
-          .toLowerCase()
-          .replace(/[^a-z0-9\s]/g, "")
-          .trim()
-          .replace(/\s+/g, " ");
-      }
-      function stemWord(w) {
-        if (w.endsWith("es")) return w.slice(0, -2);
-        if (w.endsWith("s")) return w.slice(0, -1);
-        return w;
-      }
-      function tokenizeName(name) {
-        return norm(name).split(" ").map(stemWord).filter(Boolean);
-      }
-
-      function getInventoryTokenSet() {
-        const set = new Set();
-        const nodes = document.querySelectorAll(
-          "#inventoryList .inventory-item"
-        );
-        nodes.forEach((node) => {
-          const raw =
-            node.dataset.name ||
-            node.querySelector(".inv-name")?.textContent ||
-            "";
-          tokenizeName(raw).forEach((tok) => set.add(tok));
-        });
-        return set;
-      }
-
-      function compareRecipeToInventory(recipe, invTokenSet) {
-        const inStock = [];
-        const toBuy = [];
-        recipe.ingredients.forEach((ing) => {
-          const tokens = tokenizeName(ing);
-          const present = tokens.some((t) => invTokenSet.has(t));
-          (present ? inStock : toBuy).push(ing);
-        });
-        return { inStock, toBuy };
-      }
-
-      const recipeSuggestions = [
-        {
-          id: "r1",
-          name: "Chicken Fried Rice",
-          ingredients: [
-            "Chicken",
-            "Rice",
-            "Eggs",
-            "Peas",
-            "Carrots",
-            "Soy Sauce",
-            "Garlic",
-            "Oil",
-          ],
-        },
-        {
-          id: "r2",
-          name: "Classic Omelette",
-          ingredients: ["Eggs", "Milk", "Butter", "Salt", "Pepper", "Cheese"],
-        },
-        {
-          id: "r3",
-          name: "Grilled Cheese Sandwich",
-          ingredients: ["Bread", "Butter", "Cheese"],
-        },
-        {
-          id: "r4",
-          name: "Caesar Salad",
-          ingredients: [
-            "Lettuce",
-            "Parmesan",
-            "Croutons",
-            "Chicken",
-            "Caesar Dressing",
-          ],
-        },
-        {
-          id: "r5",
-          name: "Pasta Marinara",
-          ingredients: [
-            "Pasta",
-            "Tomato Sauce",
-            "Garlic",
-            "Olive Oil",
-            "Basil",
-            "Salt",
-          ],
-        },
-      ];
-
-      function scoreSuggestion(match) {
-        return match.inStock.length * 10 - match.toBuy.length;
-      }
-
-      function searchRecipesByInventory() {
-        const invSet = getInventoryTokenSet();
-        const matches = recipeSuggestions
-          .map((r) => {
-            const { inStock, toBuy } = compareRecipeToInventory(r, invSet);
-            return { ...r, inStock, toBuy };
-          })
-          .sort((a, b) => scoreSuggestion(b) - scoreSuggestion(a));
-        renderRecipeSearchResults(matches);
-      }
-
-      function renderRecipeSearchResults(list) {
-        resultsContainer.innerHTML = "";
-
-        if (!list.length) {
-          resultsContainer.innerHTML = `<div class="text-center py-4 text-muted">No recipes found.</div>`;
-          if (hideBtn) hideBtn.classList.add("d-none"); // nothing to hide
-          return;
-        }
-
-        if (hideBtn) hideBtn.classList.remove("d-none");
-
-        list.forEach(({ name, ingredients, inStock, toBuy }) => {
-          const card = document.createElement("div");
-          card.className = "recipe-result-card card mb-3";
-          card.innerHTML = `
+      list.forEach(({ name, ingredients, inStock, toBuy }) => {
+        const card = document.createElement("div");
+        card.className = "recipe-result-card card mb-3";
+        card.innerHTML = `
       <div class="card-body">
         <h6 class="mb-1">${name}</h6>
         <small class="text-muted d-block mb-2">Ingredients: ${ingredients.join(
@@ -1179,109 +1083,110 @@
       </div>
     `;
 
-          const inWrap = card.querySelector(".in-stock");
-          if (inStock && inStock.length) {
-            inStock.forEach((item) => {
-              const span = document.createElement("span");
-              span.className = "badge rounded-pill text-bg-success me-1";
-              span.textContent = item;
-              inWrap.appendChild(span);
-            });
-          } else {
-            inWrap.innerHTML = `<span class="text-muted">None</span>`;
-          }
+        const inWrap = card.querySelector(".in-stock");
+        if (inStock && inStock.length) {
+          inStock.forEach((item) => {
+            const span = document.createElement("span");
+            span.className = "badge rounded-pill text-bg-success me-1";
+            span.textContent = item;
+            inWrap.appendChild(span);
+          });
+        } else {
+          inWrap.innerHTML = `<span class="text-muted">None</span>`;
+        }
 
-          const buyWrap = card.querySelector(".to-buy");
-          if (toBuy && toBuy.length) {
-            toBuy.forEach((item) => {
-              const span = document.createElement("span");
-              span.className = "badge rounded-pill text-bg-warning me-1";
-              span.textContent = item;
-              buyWrap.appendChild(span);
-            });
-          } else {
-            buyWrap.innerHTML = `<span class="text-muted">Nothing — you can make this now!</span>`;
-          }
+        const buyWrap = card.querySelector(".to-buy");
+        if (toBuy && toBuy.length) {
+          toBuy.forEach((item) => {
+            const span = document.createElement("span");
+            span.className = "badge rounded-pill text-bg-warning me-1";
+            span.textContent = item;
+            buyWrap.appendChild(span);
+          });
+        } else {
+          buyWrap.innerHTML = `<span class="text-muted">Nothing — you can make this now!</span>`;
+        }
 
-          const actions = document.createElement("div");
-          actions.className = "d-flex flex-wrap align-items-center gap-2 mt-2";
+        const actions = document.createElement("div");
+        actions.className = "d-flex flex-wrap align-items-center gap-2 mt-2";
 
-          const saveBtn = document.createElement("button");
-          saveBtn.className = "btn btn-outline-primary btn-sm";
-          saveBtn.textContent = "Save recipe";
-          saveBtn.addEventListener("click", () =>
-            saveRecipe(name, ingredients)
-          );
-          actions.appendChild(saveBtn);
-
-          if (toBuy && toBuy.length) {
-            const label = document.createElement("label");
-            label.className = "form-label mb-0 me-1 small text-muted";
-            label.textContent = "Assign to:";
-            actions.appendChild(label);
-
-            const select = document.createElement("select");
-            select.className = "form-select form-select-sm";
-            MEMBERS.forEach((m) => {
-              const opt = document.createElement("option");
-              opt.value = m;
-              opt.textContent = m;
-              select.appendChild(opt);
-            });
-            actions.appendChild(select);
-
-            const btn = document.createElement("button");
-            btn.className = "btn btn-primary btn-sm";
-            btn.textContent = "Add missing to Shopping List";
-            btn.addEventListener("click", () => {
-              addMissingToShoppingList(name, toBuy, select.value);
-            });
-            actions.appendChild(btn);
-          }
-
-          card.querySelector(".card-body").appendChild(actions);
-          resultsContainer.appendChild(card);
-        });
-      }
-
-      if (hideBtn) {
-        hideBtn.addEventListener("click", () => {
-          resultsContainer.innerHTML = ""; 
-          hideBtn.classList.add("d-none"); 
-        });
-      }
-
-      function hasShoppingItem(name) {
-        return shoppingItems.some(
-          (i) => i.name.toLowerCase() === name.toLowerCase()
+        const saveBtn = document.createElement("button");
+        saveBtn.className = "btn btn-outline-primary btn-sm";
+        saveBtn.textContent = "Save recipe";
+        saveBtn.addEventListener("click", () =>
+          saveRecipe(name, ingredients)
         );
-      }
-      function inferCategory(ing) {
-        const m = ing.toLowerCase();
-        if (/(milk|cheese|butter|yogurt)/.test(m)) return "Dairy";
-        if (/(chicken|beef|pork|turkey)/.test(m)) return "Meat";
-        if (/(lettuce|tomato|spinach|carrot|peas|onion|garlic|basil)/.test(m))
-          return "Vegetables";
-        if (/(pasta|rice|bread|croutons)/.test(m)) return "Grains";
-        return "Other";
-      }
-      function addMissingToShoppingList(
-        recipeName,
-        itemsToBuy,
-        owner = "Everyone"
-      ) {
-        itemsToBuy.forEach((ing) => {
-          if (!hasShoppingItem(ing))
-            addShoppingItem(ing, inferCategory(ing), owner);
-        });
-        const shoppingTabBtn = document.querySelectorAll(".tablink")[1];
-        if (shoppingTabBtn) openTab("Shopping List", shoppingTabBtn, "#2978A0");
-      }
+        actions.appendChild(saveBtn);
 
-      window.addEventListener("DOMContentLoaded", () => {
-        const btn = document.getElementById("search-recipes-btn");
-        if (btn) btn.addEventListener("click", searchRecipesByInventory);
+        if (toBuy && toBuy.length) {
+          const label = document.createElement("label");
+          label.className = "form-label mb-0 me-1 small text-muted";
+          label.textContent = "Assign to:";
+          actions.appendChild(label);
+
+          const select = document.createElement("select");
+          select.className = "form-select form-select-sm";
+          MEMBERS.forEach((m) => {
+            const opt = document.createElement("option");
+            opt.value = m;
+            opt.textContent = m;
+            select.appendChild(opt);
+          });
+          actions.appendChild(select);
+
+          const btn = document.createElement("button");
+          btn.className = "btn btn-primary btn-sm";
+          btn.textContent = "Add missing to Shopping List";
+          btn.addEventListener("click", () => {
+            addMissingToShoppingList(name, toBuy, select.value);
+          });
+          actions.appendChild(btn);
+        }
+
+        card.querySelector(".card-body").appendChild(actions);
+        resultsContainer.appendChild(card);
       });
-    </script>
-  </body>
+    }
+
+    if (hideBtn) {
+      hideBtn.addEventListener("click", () => {
+        resultsContainer.innerHTML = "";
+        hideBtn.classList.add("d-none");
+      });
+    }
+
+    function hasShoppingItem(name) {
+      return shoppingItems.some(
+        (i) => i.name.toLowerCase() === name.toLowerCase()
+      );
+    }
+    function inferCategory(ing) {
+      const m = ing.toLowerCase();
+      if (/(milk|cheese|butter|yogurt)/.test(m)) return "Dairy";
+      if (/(chicken|beef|pork|turkey)/.test(m)) return "Meat";
+      if (/(lettuce|tomato|spinach|carrot|peas|onion|garlic|basil)/.test(m))
+        return "Vegetables";
+      if (/(pasta|rice|bread|croutons)/.test(m)) return "Grains";
+      return "Other";
+    }
+    function addMissingToShoppingList(
+      recipeName,
+      itemsToBuy,
+      owner = "Everyone"
+    ) {
+      itemsToBuy.forEach((ing) => {
+        if (!hasShoppingItem(ing))
+          addShoppingItem(ing, inferCategory(ing), owner);
+      });
+      const shoppingTabBtn = document.querySelectorAll(".tablink")[1];
+      if (shoppingTabBtn) openTab("Shopping List", shoppingTabBtn, "#2978A0");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("search-recipes-btn");
+      if (btn) btn.addEventListener("click", searchRecipesByInventory);
+    });
+  </script>
+</body>
+
 </html>
