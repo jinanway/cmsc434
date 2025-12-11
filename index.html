@@ -34,6 +34,10 @@
             </div> -->
 
           <div class="inventory-search d-flex gap-2 mb-2">
+            <button id="inventorySearchMode" class="btn btn-outline-secondary btn-sm" type="button"
+              title="Searching by name. Click to switch to category.">
+              <img src="search.png" class="search-cate">
+            </button>
             <input type="text" id="inventorySearchInput" class="form-control form-control-sm"
               placeholder="Search by item name" />
             <button id="inventorySearchBtn" class="btn btn-primary btn-sm">
@@ -355,6 +359,42 @@
       "inventorySearchClear"
     );
 
+    let inventorySearchMode = "name";
+
+    const inventorySearchModeBtn = document.getElementById("inventorySearchMode");
+    const inventorySearchImg = document.querySelector("#inventorySearchMode .search-cate");
+
+    function updateInventorySearchUI() {
+      if (!inventorySearchInput) return;
+      if (inventorySearchMode === "name") {
+        inventorySearchInput.placeholder = "Search by item name";
+        if (inventorySearchModeBtn) {
+          inventorySearchModeBtn.classList.remove("btn-primary");
+          inventorySearchModeBtn.classList.add("btn-outline-secondary");
+          inventorySearchModeBtn.title =
+            "Searching by name. Click to switch to category.";
+        }
+      } else {
+        inventorySearchInput.placeholder = "Search by category";
+        if (inventorySearchModeBtn) {
+          inventorySearchModeBtn.classList.add("btn-primary");
+          inventorySearchModeBtn.classList.remove("btn-outline-secondary");
+          inventorySearchModeBtn.title =
+            "Searching by category. Click to switch to name.";
+        }
+      }
+    }
+    if (inventorySearchModeBtn) {
+      inventorySearchModeBtn.addEventListener("click", () => {
+        inventorySearchMode =
+          inventorySearchMode === "name" ? "category" : "name";
+        updateInventorySearchUI();
+        applyInventorySearch(inventorySearchInput.value);
+      });
+    }
+
+    updateInventorySearchUI();
+
     function getInventoryItems() {
       return Array.from(
         document.querySelectorAll("#inventoryList .inventory-item")
@@ -365,13 +405,19 @@
       const items = getInventoryItems();
       const lowered = term.trim().toLowerCase();
       items.forEach((item) => {
-        const nameEl = item.querySelector(".inv-name");
-        const nameText = nameEl
-          ? nameEl.textContent.trim().toLowerCase()
-          : "";
-        if (!lowered || nameText.includes(lowered))
+        let matchText = "";
+        if (inventorySearchMode === "category") {
+          const cat = item.dataset.category || "";
+          matchText = cat.trim().toLowerCase();
+        } else {
+          const nameEl = item.querySelector(".inv-name");
+          matchText = nameEl ? nameEl.textContent.trim().toLowerCase() : "";
+        }
+        if (!lowered || matchText.includes(lowered)) {
           item.classList.remove("search-hidden");
-        else item.classList.add("search-hidden");
+        } else {
+          item.classList.add("search-hidden");
+        }
       });
       showInventoryPage(1);
     }
