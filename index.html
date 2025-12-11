@@ -23,16 +23,6 @@
           </div>
           <hr class="hr-1" />
 
-          <!-- <div
-              id="empty-state"
-              class="text-center py-5"
-              style="display: none"
-            >
-              <p class="text-muted mb-0">
-                No items in your inventory yet. Add one above!
-              </p>
-            </div> -->
-
           <div class="inventory-search d-flex gap-2 mb-2">
             <button id="inventorySearchMode" class="btn btn-outline-secondary btn-sm" type="button"
               title="Searching by name. Click to switch to category.">
@@ -78,7 +68,17 @@
               </div>
               <div class="mb-3" id="edit-hide-category">
                 <label for="itemCategory" class="form-label">Category</label>
-                <input type="text" id="itemCategory" class="form-control" placeholder="Dairy, Produce, Meat..." />
+                <select class="form-select" id="itemCategory">
+                  <option value="">Uncategorized</option>
+                  <option value="Fruits">Fruits</option>
+                  <option value="Vegetables">Vegetables</option>
+                  <option value="Dairy">Dairy</option>
+                  <option value="Meat">Meat</option>
+                  <option value="Beverages">Beverages</option>
+                  <option value="Snacks">Snacks</option>
+                  <option value="Grains">Grains</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="itemQuantity" class="form-label">Quantity</label>
@@ -142,6 +142,7 @@
                   <option value="Snacks">Snacks</option>
                   <option value="Grains">Grains</option>
                   <option value="Other">Other</option>
+                  <option value="Uncategorized">Uncategorized</option>
                 </select>
               </div>
               <div class="col-12 col-md-3">
@@ -179,13 +180,14 @@
               <option value="Snacks">Snacks</option>
               <option value="Grains">Grains</option>
               <option value="Other">Other</option>
+              <option value="Uncategorized">Uncategorized</option>
             </select>
           </div>
           <div class="col-6 col-md-4">
             <label for="filter-owner" class="form-label small">Filter by Owner</label>
             <select class="form-select form-select-sm" id="filter-owner">
-              <option value="all">All Owners</option>
-              <option value="Everyone">Everyone</option>
+              <option value="all">No filter</option>
+              <option value="Everyone">Shared by Everyone</option>
               <option value="Jinan">Jinan</option>
               <option value="Shravan">Shravan</option>
               <option value="Dain">Dain</option>
@@ -279,6 +281,19 @@
     </div>
   </div>
 
+  <!-- Toast Container for Notifications -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Shopping List</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="toastMessage">
+        Items added to shopping list
+      </div>
+    </div>
+  </div>
+
   <script src="bootstrap.bundle.min.js"></script>
   <script>
 
@@ -306,14 +321,14 @@
         id: 3,
         name: "Lettuce",
         quantity: "2.5 Heads",
-        category: "Produce",
+        category: "Vegetables",
         date: "2025-11-08",
       },
       {
         id: 4,
         name: "Leftover Pasta",
         quantity: "1 Container",
-        category: "Leftovers",
+        category: "Other",
         date: "2025-11-01",
       },
     ];
@@ -473,6 +488,7 @@
       );
 
     let itemToDelete = null;
+    let shoppingItemToDelete = null;
     let itemBeingEdited = null;
     let isEditing = false;
 
@@ -491,7 +507,7 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("itemName").value.trim();
-      const category = document.getElementById("itemCategory").value.trim();
+      const category = document.getElementById("itemCategory").value.trim() || "Uncategorized";
       const quantity = document.getElementById("itemQuantity").value.trim();
       const date = document.getElementById("itemDate").value;
       if (!name || !date) return;
@@ -612,6 +628,10 @@
             currentInventoryPage = totalPages;
           showInventoryPage(currentInventoryPage);
         }
+        if (shoppingItemToDelete !== null) {
+          deleteItem(shoppingItemToDelete);
+          shoppingItemToDelete = null;
+        }
         bootstrap.Modal.getInstance(
           document.getElementById("deleteItemModal")
         ).hide();
@@ -623,6 +643,7 @@
         if (itemToDelete && itemToDelete.classList.contains("show-delete")) {
           itemToDelete.classList.remove("show-delete");
         }
+        shoppingItemToDelete = null;
       });
 
     function buildExpirationText(isoDate) {
@@ -685,8 +706,8 @@
       document.getElementById("edit-hide-category").style.display = "none";
       // document.getElementById("itemName").value = itemDiv.dataset.name || "";
       document.getElementById("itemDate").value = itemDiv.dataset.date || "";
-      // document.getElementById("itemCategory").value =
-      //   itemDiv.dataset.category || "";
+      const categoryValue = itemDiv.dataset.category || "";
+      document.getElementById("itemCategory").value = categoryValue || "";
       document.getElementById("itemQuantity").value =
         itemDiv.dataset.quantity || "";
       document.getElementById("addItemModalTitle").textContent = `Edit - ${itemDiv.dataset.name}`;
@@ -821,6 +842,19 @@
       }
     }
 
+    function showDeleteShoppingItemModal(itemId) {
+      const item = shoppingItems.find((i) => i.id === itemId);
+      if (!item) return;
+      
+      shoppingItemToDelete = itemId;
+      document.getElementById("deleteMessage").textContent = 
+        `Are you sure you want to remove ${item.name}?`;
+      document.getElementById("deleteExpiration").textContent = "";
+      const deleteModalEl = document.getElementById("deleteItemModal");
+      const deleteModal = bootstrap.Modal.getOrCreateInstance(deleteModalEl);
+      deleteModal.show();
+    }
+
     function deleteItem(itemId) {
       shoppingItems = shoppingItems.filter((i) => i.id !== itemId);
       saveToLocalStorage();
@@ -889,7 +923,7 @@
                       <span class="badge bg-info">${item.owner}</span>
                     </small>
                   </div>
-                  <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteItem(${item.id
+                  <button class="btn btn-sm btn-outline-danger ms-2" onclick="showDeleteShoppingItemModal(${item.id
             })"><span>×</span></button>
                 </div>
               </div>
@@ -1220,10 +1254,36 @@
       itemsToBuy,
       owner = "Everyone"
     ) {
+      const addedItems = [];
       itemsToBuy.forEach((ing) => {
-        if (!hasShoppingItem(ing))
+        if (!hasShoppingItem(ing)) {
           addShoppingItem(ing, inferCategory(ing), owner);
+          addedItems.push(ing);
+        }
       });
+      
+      // Clear filters to show all items
+      document.getElementById("filter-category").value = "all";
+      document.getElementById("filter-owner").value = "all";
+      renderShoppingList();
+      
+      // Show feedback message
+      const toastEl = document.getElementById("toastNotification");
+      const toastMessage = document.getElementById("toastMessage");
+      
+      if (addedItems.length > 0) {
+        const itemsText = addedItems.length === 1 
+          ? `"${addedItems[0]}"` 
+          : `${addedItems.length} items`;
+        toastMessage.textContent = `Added ${itemsText} to your shopping list!`;
+      } else {
+        toastMessage.textContent = "All items are already in your shopping list.";
+      }
+      
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+      
+      // Switch to shopping list tab
       const shoppingTabBtn = document.querySelectorAll(".tablink")[1];
       if (shoppingTabBtn) openTab("Shopping List", shoppingTabBtn, "#2978A0");
     }
