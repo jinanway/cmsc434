@@ -119,6 +119,39 @@
       </div>
     </div>
 
+    <!-- ✅ Added Items Popup -->
+  <div class="modal fade" id="addedItemsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Added to Shopping List</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-2">
+            <strong>Assigned to:</strong> <span id="addedItemsOwner"></span>
+          </div>
+
+          <div>
+            <strong>Items added:</strong>
+            <ul id="addedItemsList" class="mt-2 mb-0"></ul>
+            <div id="addedItemsNone" class="text-muted" style="display:none;">
+              No new items were added (everything was already on the list).
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
     <div id="Shopping List" class="tabcontent">
       <h1>Shopping List</h1>
       <div class="shopping-form-container mb-4">
@@ -219,11 +252,12 @@
 
     <div id="Recipes" class="tabcontent">
       <h1>Recipes</h1>
-
+    
+      <!-- Add Recipe card (unchanged) -->
       <div class="card recipe-card mb-3">
         <div class="card-body">
           <h5 class="card-title">Add Recipe</h5>
-
+    
           <div class="card recipe-card mb-3">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -237,9 +271,9 @@
               </div>
             </div>
           </div>
-
+    
           <div id="recipe-search-results"></div>
-
+    
           <form id="recipe-form" class="row g-2">
             <div class="col-12">
               <label class="form-label">Recipe Name</label>
@@ -247,8 +281,13 @@
             </div>
             <div class="col-12">
               <label class="form-label">Ingredients</label>
-              <input type="text" class="form-control" id="recipe-ingredients" placeholder="e.g., Chicken, Rice, Spices"
-                required />
+              <input
+                type="text"
+                class="form-control"
+                id="recipe-ingredients"
+                placeholder="e.g., Chicken, Rice, Spices"
+                required
+              />
             </div>
             <div class="col-12">
               <button class="btn btn-primary w-100" type="submit">
@@ -258,10 +297,17 @@
           </form>
         </div>
       </div>
-
-      <div id="recipe-list"></div>
-      <div id="recipe-empty" class="text-center py-5" style="display: none">
-        <p class="text-muted">No saved recipes yet.</p>
+    
+      <!-- 🆕 Saved Recipes card -->
+      <div class="card recipe-card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Saved Recipes</h5>
+    
+          <div id="recipe-list"></div>
+          <div id="recipe-empty" class="text-center py-5" style="display: none">
+            <p class="text-muted">No saved recipes yet.</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -337,6 +383,7 @@
 
     const resultsContainer = document.getElementById("recipe-search-results");
     const hideBtn = document.getElementById("hide-recipes-btn");
+    const searchBtn = document.getElementById("search-recipes-btn");
 
     function openTab(tabName, element, color) {
       const tabs = document.getElementsByClassName("tabcontent");
@@ -980,8 +1027,20 @@
         const ing = document
           .getElementById("recipe-ingredients")
           .value.trim();
+
         if (name && ing) {
-          recipes.push({ id: Date.now(), name, ing });
+          const ingredientsArr = ing
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
+
+          recipes.push({
+            id: Date.now(),
+            name,
+            ing,                  // original string, for display
+            ingredients: ingredientsArr, // array, for inventory matching
+          });
+
           this.reset();
           renderRecipes();
         }
@@ -993,35 +1052,102 @@
     }
 
     function renderRecipes() {
-      const list = document.getElementById("recipe-list");
-      const empty = document.getElementById("recipe-empty");
-      list.innerHTML = "";
-      if (recipes.length === 0) {
-        empty.style.display = "block";
-        return;
-      }
-      empty.style.display = "none";
-      recipes.forEach((r) => {
-        const card = document.createElement("div");
-        card.className = "recipe-card card mb-2";
-        card.innerHTML = `
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <h6>${r.name}</h6>
-              <small class="text-muted">${r.ing}</small>
-            </div>
-            <button class="btn btn-outline-danger btn-sm" onclick="deleteRecipe(${r.id})">×</button>
-          </div>`;
-        list.appendChild(card);
+  const list = document.getElementById("recipe-list");
+  const empty = document.getElementById("recipe-empty");
+  list.innerHTML = "";
+
+  if (recipes.length === 0) {
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  // Build a fresh view of inventory each time
+  const invSet = getInventoryTokenSet();
+
+  recipes.forEach((r) => {
+    // Ensure we have an ingredients array even for older objects
+    const ingredientsArr = r.ingredients
+      ? r.ingredients
+      : r.ing
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+    const { inStock, toBuy } = compareRecipeToInventory(
+      { ingredients: ingredientsArr },
+      invSet
+    );
+
+    const card = document.createElement("div");
+    card.className = "recipe-card card mb-2";
+    card.innerHTML = `
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <h6 class="mb-1">${r.name}</h6>
+            <small class="text-muted d-block">${ingredientsArr.join(", ")}</small>
+          </div>
+          <button class="btn btn-outline-danger btn-sm ms-2" onclick="deleteRecipe(${r.id})">×</button>
+        </div>
+
+        <div class="ingredient-badges mb-2">
+          <div class="mb-1"><strong>In inventory:</strong></div>
+          <div class="chip-row in-stock"></div>
+        </div>
+
+        <div class="ingredient-badges">
+          <div class="mb-1"><strong>Need to buy:</strong></div>
+          <div class="chip-row to-buy"></div>
+        </div>
+      </div>
+    `;
+
+    // Fill "In inventory" chips
+    const inWrap = card.querySelector(".in-stock");
+    if (inStock && inStock.length) {
+      inStock.forEach((item) => {
+        const span = document.createElement("span");
+        span.className = "badge rounded-pill text-bg-success me-1";
+        span.textContent = item;
+        inWrap.appendChild(span);
       });
+    } else {
+      inWrap.innerHTML = `<span class="text-muted">None</span>`;
     }
+
+    // Fill "Need to buy" chips
+    const buyWrap = card.querySelector(".to-buy");
+    if (toBuy && toBuy.length) {
+      toBuy.forEach((item) => {
+        const span = document.createElement("span");
+        span.className = "badge rounded-pill text-bg-warning me-1";
+        span.textContent = item;
+        buyWrap.appendChild(span);
+      });
+    } else {
+      buyWrap.innerHTML = `<span class="text-muted">Nothing — you can make this now!</span>`;
+    }
+
+    list.appendChild(card);
+  });
+}
+
 
     function saveRecipe(name, ingredientsArr) {
       if (recipes.some((r) => r.name.toLowerCase() === name.toLowerCase()))
         return;
-      recipes.push({ id: Date.now(), name, ing: ingredientsArr.join(", ") });
+
+      recipes.push({
+        id: Date.now(),
+        name,
+        ing: ingredientsArr.join(", "),
+        ingredients: ingredientsArr,
+      });
+
       renderRecipes();
     }
+
 
     function norm(s) {
       return (s || "")
@@ -1131,20 +1257,22 @@
     }
 
     function renderRecipeSearchResults(list) {
-      resultsContainer.innerHTML = "";
+  resultsContainer.innerHTML = "";
 
-      if (!list.length) {
-        resultsContainer.innerHTML = `<div class="text-center py-4 text-muted">No recipes found.</div>`;
-        if (hideBtn) hideBtn.classList.add("d-none"); // nothing to hide
-        return;
-      }
+  if (!list.length) {
+    resultsContainer.innerHTML = `<div class="text-center py-4 text-muted">No recipes found.</div>`;
+    if (hideBtn) hideBtn.classList.add("d-none");
+    if (searchBtn) searchBtn.classList.remove("d-none");
+    return;
+  }
 
-      if (hideBtn) hideBtn.classList.remove("d-none");
+  if (hideBtn) hideBtn.classList.remove("d-none");
+  if (searchBtn) searchBtn.classList.add("d-none");
 
-      list.forEach(({ name, ingredients, inStock, toBuy }) => {
-        const card = document.createElement("div");
-        card.className = "recipe-result-card card mb-3";
-        card.innerHTML = `
+  list.forEach(({ name, ingredients, inStock, toBuy }) => {
+    const card = document.createElement("div");
+    card.className = "recipe-result-card card mb-3";
+    card.innerHTML = `
       <div class="card-body">
         <h6 class="mb-1">${name}</h6>
         <small class="text-muted d-block mb-2">Ingredients: ${ingredients.join(
@@ -1163,77 +1291,80 @@
       </div>
     `;
 
-        const inWrap = card.querySelector(".in-stock");
-        if (inStock && inStock.length) {
-          inStock.forEach((item) => {
-            const span = document.createElement("span");
-            span.className = "badge rounded-pill text-bg-success me-1";
-            span.textContent = item;
-            inWrap.appendChild(span);
-          });
-        } else {
-          inWrap.innerHTML = `<span class="text-muted">None</span>`;
-        }
-
-        const buyWrap = card.querySelector(".to-buy");
-        if (toBuy && toBuy.length) {
-          toBuy.forEach((item) => {
-            const span = document.createElement("span");
-            span.className = "badge rounded-pill text-bg-warning me-1";
-            span.textContent = item;
-            buyWrap.appendChild(span);
-          });
-        } else {
-          buyWrap.innerHTML = `<span class="text-muted">Nothing — you can make this now!</span>`;
-        }
-
-        const actions = document.createElement("div");
-        actions.className = "d-flex flex-wrap align-items-center gap-2 mt-2";
-
-        const saveBtn = document.createElement("button");
-        saveBtn.className = "btn btn-outline-primary btn-sm";
-        saveBtn.textContent = "Save recipe";
-        saveBtn.addEventListener("click", () =>
-          saveRecipe(name, ingredients)
-        );
-        actions.appendChild(saveBtn);
-
-        if (toBuy && toBuy.length) {
-          const label = document.createElement("label");
-          label.className = "form-label mb-0 me-1 small text-muted";
-          label.textContent = "Assign to:";
-          actions.appendChild(label);
-
-          const select = document.createElement("select");
-          select.className = "form-select form-select-sm";
-          MEMBERS.forEach((m) => {
-            const opt = document.createElement("option");
-            opt.value = m;
-            opt.textContent = m;
-            select.appendChild(opt);
-          });
-          actions.appendChild(select);
-
-          const btn = document.createElement("button");
-          btn.className = "btn btn-primary btn-sm";
-          btn.textContent = "Add missing to Shopping List";
-          btn.addEventListener("click", () => {
-            addMissingToShoppingList(name, toBuy, select.value);
-          });
-          actions.appendChild(btn);
-        }
-
-        card.querySelector(".card-body").appendChild(actions);
-        resultsContainer.appendChild(card);
+    const inWrap = card.querySelector(".in-stock");
+    if (inStock && inStock.length) {
+      inStock.forEach((item) => {
+        const span = document.createElement("span");
+        span.className = "badge rounded-pill text-bg-success me-1";
+        span.textContent = item;
+        inWrap.appendChild(span);
       });
+    } else {
+      inWrap.innerHTML = `<span class="text-muted">None</span>`;
     }
+
+    const buyWrap = card.querySelector(".to-buy");
+    if (toBuy && toBuy.length) {
+      toBuy.forEach((item) => {
+        const span = document.createElement("span");
+        span.className = "badge rounded-pill text-bg-warning me-1";
+        span.textContent = item;
+        buyWrap.appendChild(span);
+      });
+    } else {
+      buyWrap.innerHTML = `<span class="text-muted">Nothing — you can make this now!</span>`;
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "d-flex flex-wrap align-items-center gap-2 mt-2";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.className = "btn btn-outline-primary btn-sm";
+    saveBtn.textContent = "Save recipe";
+    saveBtn.addEventListener("click", () =>
+      saveRecipe(name, ingredients)
+    );
+    actions.appendChild(saveBtn);
+
+    if (toBuy && toBuy.length) {
+      const label = document.createElement("label");
+      label.className = "form-label mb-0 me-1 small text-muted";
+      label.textContent = "Assign to:";
+      actions.appendChild(label);
+
+      const select = document.createElement("select");
+      select.className = "form-select form-select-sm";
+      MEMBERS.forEach((m) => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = m;
+        select.appendChild(opt);
+      });
+      actions.appendChild(select);
+
+      const btn = document.createElement("button");
+      btn.className = "btn btn-primary btn-sm";
+      btn.textContent = "Add missing to Shopping List";
+      btn.addEventListener("click", () => {
+        addMissingToShoppingList(name, toBuy, select.value);
+      });
+      actions.appendChild(btn);
+    }
+
+    card.querySelector(".card-body").appendChild(actions);
+    resultsContainer.appendChild(card);
+  });
+}
+
 
     if (hideBtn) {
       hideBtn.addEventListener("click", () => {
         resultsContainer.innerHTML = "";
         hideBtn.classList.add("d-none");
+        if (searchBtn) searchBtn.classList.remove("d-none");
       });
     }
+
 
     function hasShoppingItem(name) {
       return shoppingItems.some(
@@ -1249,44 +1380,50 @@
       if (/(pasta|rice|bread|croutons)/.test(m)) return "Grains";
       return "Other";
     }
-    function addMissingToShoppingList(
-      recipeName,
-      itemsToBuy,
-      owner = "Everyone"
-    ) {
-      const addedItems = [];
-      itemsToBuy.forEach((ing) => {
-        if (!hasShoppingItem(ing)) {
-          addShoppingItem(ing, inferCategory(ing), owner);
-          addedItems.push(ing);
-        }
-      });
-      
-      // Clear filters to show all items
-      document.getElementById("filter-category").value = "all";
-      document.getElementById("filter-owner").value = "all";
-      renderShoppingList();
-      
-      // Show feedback message
-      const toastEl = document.getElementById("toastNotification");
-      const toastMessage = document.getElementById("toastMessage");
-      
-      if (addedItems.length > 0) {
-        const itemsText = addedItems.length === 1 
-          ? `"${addedItems[0]}"` 
-          : `${addedItems.length} items`;
-        toastMessage.textContent = `Added ${itemsText} to your shopping list!`;
+    
+    function showAddedItemsModal(owner, addedItems) {
+      const ownerEl = document.getElementById("addedItemsOwner");
+      const listEl = document.getElementById("addedItemsList");
+      const noneEl = document.getElementById("addedItemsNone");
+
+      ownerEl.textContent = owner || "Everyone";
+
+      listEl.innerHTML = "";
+      if (addedItems && addedItems.length) {
+        noneEl.style.display = "none";
+        addedItems.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          listEl.appendChild(li);
+        });
       } else {
-        toastMessage.textContent = "All items are already in your shopping list.";
+        noneEl.style.display = "block";
       }
-      
-      const toast = new bootstrap.Toast(toastEl);
-      toast.show();
-      
-      // Switch to shopping list tab
-      const shoppingTabBtn = document.querySelectorAll(".tablink")[1];
-      if (shoppingTabBtn) openTab("Shopping List", shoppingTabBtn, "#2978A0");
+
+      const modalEl = document.getElementById("addedItemsModal");
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
     }
+
+    
+    function addMissingToShoppingList(recipeName, itemsToBuy, owner = "Everyone") {
+  const addedItems = [];
+
+  itemsToBuy.forEach((ing) => {
+    if (!hasShoppingItem(ing)) {
+      addShoppingItem(ing, inferCategory(ing), owner);
+      addedItems.push(ing);
+    }
+  });
+
+  // (Optional) keep your list consistent if user later opens Shopping List
+  document.getElementById("filter-category").value = "all";
+  document.getElementById("filter-owner").value = "all";
+  renderShoppingList();
+
+  showAddedItemsModal(owner, addedItems);
+
+}
+
 
     window.addEventListener("DOMContentLoaded", () => {
       const btn = document.getElementById("search-recipes-btn");
